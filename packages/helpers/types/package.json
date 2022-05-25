@@ -1,6 +1,6 @@
 {
   "name": "@exodus/walletconnect-types",
-  "version": "1.7.0-exodus.0",
+  "version": "1.7.0-exodus.1",
   "description": "Typescript Types for WalletConnect",
   "scripts": {},
   "keywords": [

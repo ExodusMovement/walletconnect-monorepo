@@ -47,6 +47,14 @@ This project exists thanks to all the people who contribute.
 
 All contributions are welcome! Feel free to create an Issue or make a PR in this repository
 
+## Publish
+
+```
+npm run bootstrap
+npm run build
+npm exec lerna publish
+```
+
 ## License
 
 Apache 2.0

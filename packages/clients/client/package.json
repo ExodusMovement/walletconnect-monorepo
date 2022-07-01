@@ -1,6 +1,6 @@
 {
   "name": "@exodus/walletconnect-client",
-  "version": "1.7.0-exodus.2",
+  "version": "1.7.0-exodus.3",
   "description": "Client for WalletConnect",
   "scripts": {
     "clean": "rm -rf dist",
@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@exodus/walletconnect-core": "^1.7.0-exodus.2",
-    "@exodus/walletconnect-iso-crypto": "^1.7.0-exodus.2",
+    "@exodus/walletconnect-iso-crypto": "^1.7.0-exodus.3",
     "@exodus/walletconnect-types": "^1.7.0-exodus.2",
     "@exodus/walletconnect-utils": "^1.7.0-exodus.2"
   },

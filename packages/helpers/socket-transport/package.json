@@ -1,6 +1,6 @@
 {
   "name": "@exodus/walletconnect-socket-transport",
-  "version": "1.7.0-exodus.2",
+  "version": "1.7.0-exodus.4",
   "description": "Socket Transport for WalletConnect",
   "scripts": {
     "clean": "rm -rf dist",

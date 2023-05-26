@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { getAccountsFromNamespaces, getSdkError, isValidArray } from "@walletconnect/utils";
+import { getAccountsFromNamespaces, getSdkError, isValidArray } from "@exodus/walletconnect-utils";
 import {
   IEthereumProvider as IProvider,
   IEthereumProviderEvents,

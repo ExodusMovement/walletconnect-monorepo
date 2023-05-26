@@ -19,7 +19,7 @@ import {
   createExpiringPromise,
   hashMessage,
   isValidArray,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import {
   CORE_STORAGE_PREFIX,
   SUBSCRIBER_CONTEXT,

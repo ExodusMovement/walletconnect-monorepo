@@ -1,4 +1,4 @@
-import { getSdkError } from "@walletconnect/utils";
+import { getSdkError } from "@exodus/walletconnect-utils";
 import {
   initTwoClients,
   testConnectMethod,

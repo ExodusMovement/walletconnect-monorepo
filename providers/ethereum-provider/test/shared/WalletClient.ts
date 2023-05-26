@@ -2,7 +2,7 @@ import SignClient from "@exodus/walletconnect-sign-client";
 import { formatJsonRpcError, formatJsonRpcResult } from "@exodus/walletconnect-jsonrpc-utils";
 import { SIGNER_EVENTS } from "@walletconnect/signer-connection";
 import { SignClientTypes, SessionTypes } from "@exodus/walletconnect-types";
-import { getSdkError, getChainsFromAccounts } from "@walletconnect/utils";
+import { getSdkError, getChainsFromAccounts } from "@exodus/walletconnect-utils";
 import { ethers, utils } from "ethers";
 import EthereumProvider from "../../src";
 

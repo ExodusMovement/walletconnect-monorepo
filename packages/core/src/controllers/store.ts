@@ -5,7 +5,7 @@ import {
   isProposalStruct,
   isSessionStruct,
   isUndefined,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { CORE_STORAGE_PREFIX, STORE_STORAGE_VERSION } from "../constants";
 import isEqual from "lodash.isequal";
 

@@ -4,7 +4,7 @@ import {
   isValidObject,
   mergeArrays,
   parseNamespaceKey,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { RPC_URL } from "../constants";
 import { Namespace, NamespaceConfig } from "../types";
 import { merge } from "lodash";

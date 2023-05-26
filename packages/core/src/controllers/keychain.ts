@@ -1,6 +1,6 @@
 import { generateChildLogger, getLoggerContext, Logger } from "@exodus/walletconnect-logger";
 import { ICore, IKeyChain } from "@exodus/walletconnect-types";
-import { getInternalError, mapToObj, objToMap } from "@walletconnect/utils";
+import { getInternalError, mapToObj, objToMap } from "@exodus/walletconnect-utils";
 
 import { CORE_STORAGE_PREFIX, KEYCHAIN_CONTEXT, KEYCHAIN_STORAGE_VERSION } from "../constants";
 

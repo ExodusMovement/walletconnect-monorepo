@@ -29,7 +29,11 @@ import {
   RelayerTypes,
   SubscriberTypes,
 } from "@exodus/walletconnect-types";
-import { createExpiringPromise, formatRelayRpcUrl, getInternalError } from "@walletconnect/utils";
+import {
+  createExpiringPromise,
+  formatRelayRpcUrl,
+  getInternalError,
+} from "@exodus/walletconnect-utils";
 
 import {
   RELAYER_SDK_VERSION,

@@ -1,4 +1,4 @@
-import { parseUri } from "@walletconnect/utils";
+import { parseUri } from "@exodus/walletconnect-utils";
 import {
   EngineTypes,
   PairingTypes,

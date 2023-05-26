@@ -1,4 +1,4 @@
-import { getSdkError } from "@walletconnect/utils";
+import { getSdkError } from "@exodus/walletconnect-utils";
 import SignClient from "../../src";
 import {
   initTwoClients,

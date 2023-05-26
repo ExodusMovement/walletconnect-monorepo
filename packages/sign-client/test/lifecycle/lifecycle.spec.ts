@@ -1,4 +1,4 @@
-import { getSdkError } from "@walletconnect/utils";
+import { getSdkError } from "@exodus/walletconnect-utils";
 import { deleteClients, throttle, initTwoPairedClients } from "../shared";
 import { TEST_RELAY_URL } from "../shared/values";
 import { describe, it, expect, afterEach } from "vitest";

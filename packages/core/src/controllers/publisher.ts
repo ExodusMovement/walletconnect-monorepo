@@ -8,7 +8,7 @@ import {
   getRelayProtocolName,
   isUndefined,
   createExpiringPromise,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { EventEmitter } from "events";
 
 import { PUBLISHER_CONTEXT, PUBLISHER_DEFAULT_TTL, RELAYER_EVENTS } from "../constants";

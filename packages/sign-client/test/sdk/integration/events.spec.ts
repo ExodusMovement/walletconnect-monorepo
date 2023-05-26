@@ -1,4 +1,4 @@
-import { createExpiringPromise, getSdkError } from "@walletconnect/utils";
+import { createExpiringPromise, getSdkError } from "@exodus/walletconnect-utils";
 import { expect, describe, it, beforeAll, afterAll } from "vitest";
 import {
   initTwoClients,

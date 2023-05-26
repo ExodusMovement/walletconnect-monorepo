@@ -2,7 +2,7 @@ import { SignClient } from "@exodus/walletconnect-sign-client";
 import { IKeyValueStorage } from "@exodus/walletconnect-keyvaluestorage";
 import { SignClientTypes } from "@exodus/walletconnect-types";
 import { RequestParams } from "../types";
-import { ENV_MAP, getEnvironment } from "@walletconnect/utils";
+import { ENV_MAP, getEnvironment } from "@exodus/walletconnect-utils";
 
 export const handleDeepLinks = (client: InstanceType<typeof SignClient>, params: RequestParams) => {
   const handleSessionRequestSent = (

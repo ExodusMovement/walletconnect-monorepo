@@ -12,7 +12,7 @@ import {
   getAccountsFromNamespaces,
   getChainsFromNamespaces,
   getChainsFromRequiredNamespaces,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { EventEmitter } from "events";
 
 function isClient(opts?: SignerConnectionClientOpts): opts is SignClient {

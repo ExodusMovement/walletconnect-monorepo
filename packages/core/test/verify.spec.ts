@@ -1,6 +1,6 @@
 import { expect, describe, it } from "vitest";
 import fetch from "node-fetch";
-import { hashMessage } from "@walletconnect/utils";
+import { hashMessage } from "@exodus/walletconnect-utils";
 
 import { Core, VERIFY_SERVER } from "../src";
 import { disconnectSocket, TEST_CORE_OPTIONS } from "./shared";

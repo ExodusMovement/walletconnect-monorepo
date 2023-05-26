@@ -1,7 +1,7 @@
 import { RELAYER_EVENTS } from "@exodus/walletconnect-core";
 import { formatJsonRpcError, JsonRpcError } from "@exodus/walletconnect-jsonrpc-utils";
 import { RelayerTypes } from "@exodus/walletconnect-types";
-import { getSdkError } from "@walletconnect/utils";
+import { getSdkError } from "@exodus/walletconnect-utils";
 import { expect, describe, it, vi } from "vitest";
 import SignClient from "../../src";
 import {

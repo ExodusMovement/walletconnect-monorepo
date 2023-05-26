@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach } from "vitest";
 import { getDefaultLoggerOptions, pino } from "@exodus/walletconnect-logger";
-import { generateRandomBytes32, hashMessage } from "@walletconnect/utils";
+import { generateRandomBytes32, hashMessage } from "@exodus/walletconnect-utils";
 
 import {
   Core,

@@ -1,5 +1,5 @@
 import { expect, describe, it } from "vitest";
-import { calcExpiry, formatExpirerTarget } from "@walletconnect/utils";
+import { calcExpiry, formatExpirerTarget } from "@exodus/walletconnect-utils";
 
 import { Core, EXPIRER_EVENTS } from "../src";
 import { disconnectSocket, TEST_CORE_OPTIONS } from "./shared";

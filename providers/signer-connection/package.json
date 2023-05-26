@@ -37,8 +37,8 @@
     "@exodus/walletconnect-jsonrpc-types": "^1.0.3-exodus.0",
     "@exodus/walletconnect-jsonrpc-utils": "^1.0.8-exodus.0",
     "@exodus/walletconnect-sign-client": "2.7.6-exodus.0",
-    "@exodus/walletconnect-types": "2.7.6-exodus.0",
-    "@walletconnect/utils": "2.7.6-exodus.0",
+    "@exodus/walletconnect-types": "^2.7.6-exodus.0",
+    "@exodus/walletconnect-utils": "^2.7.6-exodus.0",
     "events": "^3.3.0",
     "uint8arrays": "^3.1.0"
   }

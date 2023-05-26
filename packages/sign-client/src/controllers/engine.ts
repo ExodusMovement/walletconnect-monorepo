@@ -61,7 +61,7 @@ import {
   isValidString,
   parseExpirerTarget,
   TYPE_1,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import EventEmmiter from "events";
 import {
   ENGINE_CONTEXT,

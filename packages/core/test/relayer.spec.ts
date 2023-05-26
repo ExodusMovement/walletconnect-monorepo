@@ -16,7 +16,7 @@ import { disconnectSocket, TEST_CORE_OPTIONS, throttle } from "./shared";
 import { ICore, IRelayer } from "@exodus/walletconnect-types";
 import Sinon from "sinon";
 import { JsonRpcRequest } from "@exodus/walletconnect-jsonrpc-utils";
-import { generateRandomBytes32 } from "@walletconnect/utils";
+import { generateRandomBytes32 } from "@exodus/walletconnect-utils";
 
 describe("Relayer", () => {
   const logger = pino(getDefaultLoggerOptions({ level: CORE_DEFAULT.logger }));

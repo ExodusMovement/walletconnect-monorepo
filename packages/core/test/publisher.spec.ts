@@ -1,7 +1,7 @@
 import { expect, describe, it, beforeEach, afterEach } from "vitest";
 import Sinon from "sinon";
 import { ICore } from "@exodus/walletconnect-types";
-import { generateRandomBytes32, hashMessage } from "@walletconnect/utils";
+import { generateRandomBytes32, hashMessage } from "@exodus/walletconnect-utils";
 import { Publisher } from "../src/controllers/publisher";
 import { HEARTBEAT_EVENTS } from "@exodus/walletconnect-heartbeat";
 

@@ -17,7 +17,7 @@ import {
   deserialize,
   decodeTypeByte,
   BASE16,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { toString } from "uint8arrays";
 
 import { CRYPTO_CONTEXT, CRYPTO_CLIENT_SEED, CRYPTO_JWT_TTL } from "../constants";

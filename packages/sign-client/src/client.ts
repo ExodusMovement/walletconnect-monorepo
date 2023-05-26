@@ -11,7 +11,7 @@ import {
   ISignClientEvents,
   EngineTypes,
 } from "@exodus/walletconnect-types";
-import { getAppMetadata } from "@walletconnect/utils";
+import { getAppMetadata } from "@exodus/walletconnect-utils";
 import { EventEmitter } from "events";
 import { SIGN_CLIENT_DEFAULT, SIGN_CLIENT_PROTOCOL, SIGN_CLIENT_VERSION } from "./constants";
 import { Engine, PendingRequest, Proposal, Session } from "./controllers";

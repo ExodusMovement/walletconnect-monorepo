@@ -1,5 +1,5 @@
 import { PairingTypes, SessionTypes } from "@exodus/walletconnect-types";
-import { getSdkError } from "@walletconnect/utils";
+import { getSdkError } from "@exodus/walletconnect-utils";
 import { expect, describe, it, afterAll, beforeAll } from "vitest";
 import { createExpiringPromise } from "../../../../utils/src";
 import {

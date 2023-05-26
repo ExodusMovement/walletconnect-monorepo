@@ -1,6 +1,6 @@
 import { generateChildLogger, getLoggerContext, Logger } from "@exodus/walletconnect-logger";
 import { ICore, IMessageTracker, MessageRecord } from "@exodus/walletconnect-types";
-import { hashMessage, mapToObj, objToMap, getInternalError } from "@walletconnect/utils";
+import { hashMessage, mapToObj, objToMap, getInternalError } from "@exodus/walletconnect-utils";
 import { CORE_STORAGE_PREFIX, MESSAGES_CONTEXT, MESSAGES_STORAGE_VERSION } from "../constants";
 
 export class MessageTracker extends IMessageTracker {

@@ -1,7 +1,7 @@
 {
   "name": "@exodus/walletconnect-utils",
   "description": "Utilities for WalletConnect Protocol",
-  "version": "2.7.6-exodus.0",
+  "version": "2.7.6-exodus.1",
   "author": "WalletConnect, Inc. <walletconnect.com>",
   "homepage": "https://github.com/walletconnect/walletconnect-monorepo/",
   "license": "Apache-2.0",

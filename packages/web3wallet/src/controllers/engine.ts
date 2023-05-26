@@ -1,4 +1,4 @@
-import { AuthClient, AuthEngineTypes, IAuthClient } from "@walletconnect/auth-client";
+import { AuthClient, AuthEngineTypes, IAuthClient } from "@exodus/walletconnect-auth-client";
 import { SignClient } from "@exodus/walletconnect-sign-client";
 import { ISignClient } from "@exodus/walletconnect-types";
 import { IWeb3WalletEngine, Web3WalletTypes } from "../types";

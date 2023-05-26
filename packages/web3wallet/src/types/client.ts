@@ -1,6 +1,6 @@
 import EventEmmiter, { EventEmitter } from "events";
 import { ICore, ProposalTypes, Verify } from "@exodus/walletconnect-types";
-import { AuthClientTypes } from "@walletconnect/auth-client";
+import { AuthClientTypes } from "@exodus/walletconnect-auth-client";
 import { IWeb3WalletEngine } from "./engine";
 import { Logger } from "@exodus/walletconnect-logger";
 

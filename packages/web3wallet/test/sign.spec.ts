@@ -2,7 +2,7 @@ import { Core } from "@exodus/walletconnect-core";
 import { formatJsonRpcResult } from "@exodus/walletconnect-jsonrpc-utils";
 import { SignClient } from "@exodus/walletconnect-sign-client";
 import { ICore, ISignClient, SessionTypes } from "@exodus/walletconnect-types";
-import { getSdkError } from "@walletconnect/utils";
+import { getSdkError } from "@exodus/walletconnect-utils";
 import { Wallet as CryptoWallet } from "@ethersproject/wallet";
 
 import { expect, describe, it, beforeEach, vi, beforeAll, afterAll } from "vitest";

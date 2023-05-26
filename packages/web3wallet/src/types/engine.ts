@@ -1,4 +1,4 @@
-import { AuthEngineTypes, IAuthClient } from "@walletconnect/auth-client";
+import { AuthEngineTypes, IAuthClient } from "@exodus/walletconnect-auth-client";
 import { ErrorResponse, JsonRpcResponse } from "@exodus/walletconnect-jsonrpc-utils";
 import {
   ISignClient,

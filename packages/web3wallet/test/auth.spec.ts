@@ -10,7 +10,7 @@ import {
   AuthEngineTypes,
   generateNonce,
   IAuthClient,
-} from "@walletconnect/auth-client";
+} from "@exodus/walletconnect-auth-client";
 
 const defaultRequestParams: AuthEngineTypes.RequestParams = {
   aud: "http://localhost:3000/login",

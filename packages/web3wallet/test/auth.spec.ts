@@ -1,22 +1,18 @@
 import { Core } from "@exodus/walletconnect-core";
 import { ICore } from "@exodus/walletconnect-types";
 import { Wallet as CryptoWallet } from "@ethersproject/wallet";
+import { randomStringForEntropy } from "@stablelib/random";
 
 import { expect, describe, it, beforeEach, beforeAll, afterAll } from "vitest";
 import { Web3Wallet, IWeb3Wallet } from "../src";
 import { disconnect, TEST_CORE_OPTIONS } from "./shared";
-import {
-  AuthClient,
-  AuthEngineTypes,
-  generateNonce,
-  IAuthClient,
-} from "@exodus/walletconnect-auth-client";
+import { AuthClient, AuthEngineTypes, IAuthClient } from "@exodus/walletconnect-auth-client";
 
 const defaultRequestParams: AuthEngineTypes.RequestParams = {
   aud: "http://localhost:3000/login",
   domain: "localhost:3000",
   chainId: "eip155:1",
-  nonce: generateNonce(),
+  nonce: randomStringForEntropy(96),
 };
 
 describe("Auth Integration", () => {

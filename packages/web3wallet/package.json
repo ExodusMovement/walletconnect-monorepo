@@ -1,8 +1,8 @@
 {
-  "name": "@walletconnect/web3wallet",
+  "name": "@exodus/walletconnect-web3wallet",
   "description": "Web3Wallet for WalletConnect Protocol",
   "private": true,
-  "version": "1.7.4",
+  "version": "1.7.4-exodus.0",
   "author": "WalletConnect, Inc. <walletconnect.com>",
   "homepage": "https://github.com/walletconnect/walletconnect-monorepo/",
   "license": "Apache-2.0",
@@ -26,8 +26,8 @@
     "prettier": "prettier --check '{src,test}/**/*.{js,ts,jsx,tsx}'"
   },
   "dependencies": {
-    "@exodus/walletconnect-auth-client": "^2.1.0-exodus.0",
-    "@exodus/walletconnect-core": "^2.7.6-exodus.0",
+    "@exodus/walletconnect-auth-client": "^2.1.0-exodus.1",
+    "@exodus/walletconnect-core": "^2.7.6-exodus.1",
     "@exodus/walletconnect-jsonrpc-utils": "^1.0.8-exodus.0",
     "@exodus/walletconnect-logger": "^2.0.1-exodus.0",
     "@exodus/walletconnect-sign-client": "^2.7.6-exodus.0",

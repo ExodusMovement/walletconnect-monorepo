@@ -28,7 +28,7 @@
     "@exodus/walletconnect-heartbeat": "^1.2.1-exodus.0",
     "@exodus/walletconnect-jsonrpc-types": "^1.0.3-exodus.0",
     "@exodus/walletconnect-keyvaluestorage": "^1.0.2-exodus.0",
-    "@exodus/walletconnect-logger": "^2.0.1-exodus.0",
+    "@exodus/walletconnect-logger": "^2.0.1-exodus.1",
     "events": "^3.3.0"
   }
 }

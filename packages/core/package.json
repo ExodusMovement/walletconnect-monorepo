@@ -34,7 +34,7 @@
     "@exodus/walletconnect-jsonrpc-utils": "^1.0.8-exodus.0",
     "@exodus/walletconnect-jsonrpc-ws-connection": "^1.0.11-exodus.1",
     "@exodus/walletconnect-keyvaluestorage": "^1.0.2-exodus.0",
-    "@exodus/walletconnect-logger": "^2.0.1-exodus.0",
+    "@exodus/walletconnect-logger": "^2.0.1-exodus.1",
     "@exodus/walletconnect-relay-api": "^1.0.9-exodus.0",
     "@exodus/walletconnect-relay-auth": "^1.0.4-exodus.0",
     "@exodus/walletconnect-safe-json": "^1.0.2-exodus.0",

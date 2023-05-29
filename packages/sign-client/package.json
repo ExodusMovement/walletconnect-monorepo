@@ -39,7 +39,7 @@
     "@exodus/walletconnect-events": "^1.0.1-exodus.0",
     "@exodus/walletconnect-heartbeat": "^1.2.1-exodus.0",
     "@exodus/walletconnect-jsonrpc-utils": "^1.0.8-exodus.0",
-    "@exodus/walletconnect-logger": "^2.0.1-exodus.0",
+    "@exodus/walletconnect-logger": "^2.0.1-exodus.1",
     "@exodus/walletconnect-time": "^1.0.2-exodus.0",
     "@exodus/walletconnect-types": "^2.7.6-exodus.0",
     "@exodus/walletconnect-utils": "^2.7.6-exodus.0",

@@ -1,6 +1,6 @@
 {
   "name": "@exodus/walletconnect-utils",
-  "version": "1.7.0-exodus.4",
+  "version": "1.7.0-exodus.5",
   "description": "Utility Library for WalletConnect",
   "scripts": {
     "clean": "rm -rf dist",

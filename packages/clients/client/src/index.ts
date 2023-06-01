@@ -1,4 +1,4 @@
-import Connector from "@exodus/walletconnect-core";
+import Connector from "@exodus/walletconnect-core-v1";
 import { IWalletConnectOptions, IPushServerOptions } from "@exodus/walletconnect-types";
 import * as cryptoLib from "@exodus/walletconnect-iso-crypto";
 

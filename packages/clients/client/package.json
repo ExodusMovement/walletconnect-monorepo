@@ -60,7 +60,7 @@
     "webpack-cli": "3.3.10"
   },
   "dependencies": {
-    "@exodus/walletconnect-core": "^1.7.0-exodus.2",
+    "@exodus/walletconnect-core-v1": "^1.7.0-exodus.3",
     "@exodus/walletconnect-iso-crypto": "^1.7.0-exodus.3",
     "@exodus/walletconnect-types": "^1.7.0-exodus.2",
     "@exodus/walletconnect-utils": "^1.7.0-exodus.2"

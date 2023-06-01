@@ -4,7 +4,7 @@ import { EngineTypes, RelayerTypes } from "@exodus/walletconnect-types";
 // -- uri -------------------------------------------------- //
 
 export function parseRelayParams(params: any, delimiter = "-"): RelayerTypes.ProtocolOptions {
-  const relay: any = {};
+  const relay: any = Object.create(null);
   const prefix = "relay" + delimiter;
   Object.keys(params).forEach((key) => {
     if (key.startsWith(prefix)) {

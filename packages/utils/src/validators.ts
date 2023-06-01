@@ -31,7 +31,7 @@ export function isValidArray(arr: any, itemCondition?: (item: any) => boolean) {
 }
 
 export function isValidObject(obj: any) {
-  return Object.getPrototypeOf(obj) === Object.prototype && Object.keys(obj).length;
+  return [Object.prototype, null].includes(Object.getPrototypeOf(obj)) && Object.keys(obj).length;
 }
 
 export function isUndefined(input: any): input is undefined {
@@ -442,7 +442,7 @@ export function isConformingNamespaces(
 }
 
 function parseNamespaces(namespaces: ProposalTypes.RequiredNamespaces) {
-  const parsed = {};
+  const parsed = Object.create(null);
   Object.keys(namespaces).forEach((key) => {
     // e.g. `eip155:1`
     const isInlineChainDefinition = key.includes(":");
@@ -472,7 +472,7 @@ function filterDuplicateNamespaces(namespaces: string[]) {
 }
 
 function parseApprovedNamespaces(namespaces: SessionTypes.Namespaces) {
-  const parsed = {};
+  const parsed = Object.create(null);
   Object.keys(namespaces).forEach((key) => {
     const isInlineChainDefinition = key.includes(":");
     if (isInlineChainDefinition) {

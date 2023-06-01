@@ -7,7 +7,7 @@ type InternalErrorKey = keyof typeof INTERNAL_ERRORS;
 /**
  * Constants
  */
-const SDK_ERRORS = {
+const SDK_ERRORS = Object.assign(Object.create(null), {
   /* ----- INVALID (1xxx) ----- */
   INVALID_METHOD: {
     message: "Invalid method.",
@@ -98,9 +98,9 @@ const SDK_ERRORS = {
     message: "Unsupported wc_ method.",
     code: 10001,
   },
-};
+});
 
-const INTERNAL_ERRORS = {
+const INTERNAL_ERRORS = Object.assign(Object.create(null), {
   NOT_INITIALIZED: {
     message: "Not initialized.",
     code: 1,
@@ -137,7 +137,7 @@ const INTERNAL_ERRORS = {
     message: "Non conforming namespaces.",
     code: 9,
   },
-};
+});
 
 /**
  * Utilities

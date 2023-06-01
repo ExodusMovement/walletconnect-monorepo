@@ -186,7 +186,7 @@ export function mapEntries<A = any, B = any>(
   obj: Record<string, A>,
   cb: (x: A) => B,
 ): Record<string, B> {
-  const res = {};
+  const res = Object.create(null);
   Object.keys(obj).forEach((key) => {
     res[key] = cb(obj[key]);
   });

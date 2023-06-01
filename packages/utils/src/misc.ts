@@ -138,8 +138,17 @@ export function getHttpUrl(url: string) {
   // regex from https://stackoverflow.com/questions/3883871/regexp-to-grab-protocol-from-url
   const matches = url.match(/^[^:]+(?=:\/\/)/gi) || [];
   let protocol = matches[0];
-  const domain = typeof protocol !== "undefined" ? url.split("://")[1] : url;
+  if (!protocol) {
+    throw new Error(`unknown protocol for URL ${url}`);
+  }
+  if (url.split("://").length !== 2) {
+    throw new Error(`invalid :// count for ${url}`);
+  }
+  const domain = url.split("://")[1];
   protocol = protocol === "wss" ? "https" : "http";
+  if (protocol !== "https") {
+    throw new Error(`expected output protocol to be https`);
+  }
   return [protocol, domain].join("://");
 }
 

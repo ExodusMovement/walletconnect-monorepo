@@ -1,6 +1,6 @@
 {
-  "name": "@exodus/walletconnect-core",
-  "version": "1.7.0-exodus.2",
+  "name": "@exodus/walletconnect-core-v1",
+  "version": "1.7.0-exodus.3",
   "description": "Core Library for WalletConnect",
   "scripts": {
     "clean": "rm -rf dist",

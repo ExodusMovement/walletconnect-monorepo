@@ -1,6 +1,6 @@
 {
   "name": "@exodus/walletconnect-client",
-  "version": "1.7.0-exodus.5",
+  "version": "1.7.0-exodus.6",
   "description": "Client for WalletConnect",
   "scripts": {
     "clean": "rm -rf dist",
@@ -60,10 +60,10 @@
     "webpack-cli": "3.3.10"
   },
   "dependencies": {
-    "@exodus/walletconnect-core-v1": "^1.7.0-exodus.5",
-    "@exodus/walletconnect-iso-crypto": "^1.7.0-exodus.5",
+    "@exodus/walletconnect-core-v1": "^1.7.0-exodus.6",
+    "@exodus/walletconnect-iso-crypto": "^1.7.0-exodus.6",
     "@exodus/walletconnect-types": "^1.7.0-exodus.2",
-    "@exodus/walletconnect-utils-v1": "^1.7.0-exodus.5"
+    "@exodus/walletconnect-utils-v1": "^1.7.0-exodus.6"
   },
   "gitHead": "165f7993c2acc907c653c02847fb02721052c6e7"
 }

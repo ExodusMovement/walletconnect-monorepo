@@ -1,4 +1,3 @@
-import { detect } from "detect-browser";
 import { FIVE_MINUTES, fromMiliseconds, toMiliseconds } from "@exodus/walletconnect-time";
 import {
   SignClientTypes,
@@ -97,13 +96,7 @@ export function getRelayClientMetadata(protocol: string, version: number): Relay
 // -- rpcUrl ----------------------------------------------//
 
 export function getJavascriptOS() {
-  const info = detect();
-  if (info === null) return "unknown";
-  const os = info.os ? info.os.replace(" ", "").toLowerCase() : "unknown";
-  if (info.type === "browser") {
-    return [os, info.name, info.version].join("-");
-  }
-  return [os, info.version].join("-");
+  return "unknown";
 }
 
 export function getJavascriptID() {

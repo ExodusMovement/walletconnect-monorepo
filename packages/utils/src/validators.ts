@@ -298,8 +298,9 @@ export function isValidRelays(
 
   if (optional && !input) valid = true;
   else if (input && isValidArray(input) && input.length) {
+    valid = true;
     input.forEach((relay: RelayerTypes.ProtocolOptions) => {
-      valid = isValidRelay(relay);
+      valid = valid && isValidRelay(relay);
     });
   }
 

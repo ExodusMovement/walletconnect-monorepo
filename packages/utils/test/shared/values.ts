@@ -1,7 +1,7 @@
 import { SignClientTypes, SessionTypes } from "@exodus/walletconnect-types";
 
 export const TEST_PAIRING_TOPIC =
-  "c9e6d30fb34afe70a15c14e9337ba8e4d5a35dd695c39b94884b0ee60c69d168";
+  "2c03712132ad2f85adc472a2242e608d67bfecd4362d05012d69a89143fecd16";
 
 export const TEST_SESSION_TOPIC =
   "f5d3f03946b6a2a3b22661fae1385cd1639bfb6f6c070115699b0a2ec1decd8c";

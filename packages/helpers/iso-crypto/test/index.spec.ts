@@ -2,7 +2,7 @@ import "mocha";
 import { expect } from "chai";
 
 import { IJsonRpcRequest, IEncryptionPayload } from "@exodus/walletconnect-types";
-import { convertHexToArrayBuffer } from "@exodus/walletconnect-utils";
+import { convertHexToArrayBuffer } from "@exodus/walletconnect-utils-v1";
 
 import * as IsoCrypto from "../src";
 

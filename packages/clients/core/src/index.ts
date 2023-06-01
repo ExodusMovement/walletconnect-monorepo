@@ -36,7 +36,7 @@ import {
   isJsonRpcResponseSuccess,
   isJsonRpcResponseError,
   isSilentPayload,
-} from "@exodus/walletconnect-utils";
+} from "@exodus/walletconnect-utils-v1";
 import SocketTransport from "@exodus/walletconnect-socket-transport";
 import {
   ERROR_SESSION_CONNECTED,

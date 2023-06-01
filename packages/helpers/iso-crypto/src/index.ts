@@ -6,7 +6,7 @@ import {
   IJsonRpcResponseError,
   IEncryptionPayload,
 } from "@exodus/walletconnect-types";
-import { convertArrayBufferToBuffer, convertBufferToArrayBuffer } from "@exodus/walletconnect-utils";
+import { convertArrayBufferToBuffer, convertBufferToArrayBuffer } from "@exodus/walletconnect-utils-v1";
 
 export async function generateKey(length?: number): Promise<ArrayBuffer> {
   const _length = (length || 256) / 8;

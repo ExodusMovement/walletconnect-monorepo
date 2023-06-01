@@ -4,7 +4,7 @@ import {
   isJsonRpcResponseError,
   isInternalEvent,
   isReservedEvent,
-} from "@exodus/walletconnect-utils";
+} from "@exodus/walletconnect-utils-v1";
 import {
   IInternalEvent,
   IJsonRpcResponseSuccess,

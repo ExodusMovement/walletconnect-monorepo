@@ -8,7 +8,7 @@ import {
 import {
   getQueryString,
   appendToQueryString,
-} from "@exodus/walletconnect-utils";
+} from "@exodus/walletconnect-utils-v1";
 
 import NetworkMonitor from "./network.js";
 

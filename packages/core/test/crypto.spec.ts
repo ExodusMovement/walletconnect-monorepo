@@ -39,7 +39,7 @@ describe("Crypto", () => {
       crypto.keychain.set = keychainSpy;
       const returnedPublicKey = await crypto.generateKeyPair();
       const [calledPublicKey, calledPrivateKey] = keychainSpy.getCall(0).args;
-      expect(calledPublicKey).to.equal(publicKey);
+      expect(calledPublicKey).to.equal(`pk-${publicKey}`);
       expect(calledPrivateKey).to.equal(privateKey);
       expect(returnedPublicKey).to.equal(publicKey);
     });
@@ -54,13 +54,13 @@ describe("Crypto", () => {
       const overrideTopic = utils.generateRandomBytes32();
       const peerPublicKey = utils.generateRandomBytes32();
       const selfPublicKey = await crypto.generateKeyPair();
-      const selfPrivateKey = crypto.keychain.get(selfPublicKey);
+      const selfPrivateKey = crypto.keychain.get(`pk-${selfPublicKey}`);
       const expectedSymKey = utils.deriveSymKey(selfPrivateKey, peerPublicKey);
       const spy = Sinon.spy();
       crypto.setSymKey = spy;
       await crypto.generateSharedKey(selfPublicKey, peerPublicKey, overrideTopic);
       const [calledSymKey, calledOverrideTopic] = spy.getCall(0).args;
-      expect(calledSymKey).to.equal(expectedSymKey);
+      expect(calledSymKey).to.equal(`${expectedSymKey}`);
       expect(calledOverrideTopic).to.equal(overrideTopic);
     });
   });
@@ -77,7 +77,7 @@ describe("Crypto", () => {
       const topic = utils.hashKey(fakeSymKey);
       const returnedTopic = await crypto.setSymKey(fakeSymKey);
       const [calledTopic, calledSymKey] = spy.getCall(0).args;
-      expect(calledTopic).to.equal(topic);
+      expect(calledTopic).to.equal(`sym-${topic}`);
       expect(calledSymKey).to.equal(fakeSymKey);
       expect(returnedTopic).to.equal(topic);
     });
@@ -88,7 +88,7 @@ describe("Crypto", () => {
       const topic = utils.generateRandomBytes32();
       const returnedTopic = await crypto.setSymKey(fakeSymKey, topic);
       const [calledTopic, calledSymKey] = spy.getCall(0).args;
-      expect(calledTopic).to.equal(topic);
+      expect(calledTopic).to.equal(`sym-${topic}`);
       expect(calledSymKey).to.equal(fakeSymKey);
       expect(returnedTopic).to.equal(topic);
     });
@@ -105,7 +105,7 @@ describe("Crypto", () => {
       crypto.keychain.del = spy;
       await crypto.deleteKeyPair(publicKey);
       const [calledTopic] = spy.getCall(0).args;
-      expect(calledTopic).to.equal(publicKey);
+      expect(calledTopic).to.equal(`pk-${publicKey}`);
     });
   });
 
@@ -120,7 +120,7 @@ describe("Crypto", () => {
       crypto.keychain.del = spy;
       await crypto.deleteSymKey(topic);
       const [calledTopic] = spy.getCall(0).args;
-      expect(calledTopic).to.equal(topic);
+      expect(calledTopic).to.equal(`sym-${topic}`);
     });
   });
 

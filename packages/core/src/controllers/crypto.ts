@@ -47,7 +47,7 @@ export class Crypto implements ICrypto {
 
   public hasKeys: ICrypto["hasKeys"] = (tag) => {
     this.isInitialized();
-    return this.keychain.has(tag);
+    return this.keychain.has(`sym-${tag}`);
   };
 
   public getClientId: ICrypto["getClientId"] = async () => {
@@ -86,20 +86,21 @@ export class Crypto implements ICrypto {
   };
 
   public setSymKey: ICrypto["setSymKey"] = async (symKey, overrideTopic) => {
+    // TODO check if we can remove overrideTopic
     this.isInitialized();
     const topic = overrideTopic || hashKey(symKey);
-    await this.keychain.set(topic, symKey);
+    await this.keychain.set(`sym-${topic}`, symKey);
     return topic;
   };
 
   public deleteKeyPair: ICrypto["deleteKeyPair"] = async (publicKey: string) => {
     this.isInitialized();
-    await this.keychain.del(publicKey);
+    await this.keychain.del(`pk-${publicKey}`);
   };
 
   public deleteSymKey: ICrypto["deleteSymKey"] = async (topic: string) => {
     this.isInitialized();
-    await this.keychain.del(topic);
+    await this.keychain.del(`sym-${topic}`);
   };
 
   public encode: ICrypto["encode"] = async (topic, payload, opts) => {
@@ -144,12 +145,12 @@ export class Crypto implements ICrypto {
   // ---------- Private ----------------------------------------------- //
 
   private async setPrivateKey(publicKey: string, privateKey: string): Promise<string> {
-    await this.keychain.set(publicKey, privateKey);
+    await this.keychain.set(`pk-${publicKey}`, privateKey);
     return publicKey;
   }
 
   private getPrivateKey(publicKey: string) {
-    const privateKey = this.keychain.get(publicKey);
+    const privateKey = this.keychain.get(`pk-${publicKey}`);
     return privateKey;
   }
 
@@ -165,7 +166,7 @@ export class Crypto implements ICrypto {
   }
 
   private getSymKey(topic: string) {
-    const symKey = this.keychain.get(topic);
+    const symKey = this.keychain.get(`sym-${topic}`);
     return symKey;
   }
 

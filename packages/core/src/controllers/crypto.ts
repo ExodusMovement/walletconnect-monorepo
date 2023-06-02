@@ -2,13 +2,14 @@ import { generateChildLogger, getLoggerContext, Logger } from "@exodus/walletcon
 import { safeJsonParse, safeJsonStringify } from "@exodus/walletconnect-safe-json";
 import { ICore, ICrypto, IKeyChain } from "@exodus/walletconnect-types";
 import * as relayAuth from "@exodus/walletconnect-relay-auth";
-import { fromString } from "uint8arrays/from-string";
 import {
   decrypt,
   deriveSymKey,
   encrypt,
   generateKeyPair as generateKeyPairUtil,
   hashKey,
+  hex2uint8array,
+  uint8array2hex,
   getInternalError,
   generateRandomBytes32,
   validateEncoding,
@@ -16,9 +17,7 @@ import {
   isTypeOneEnvelope,
   deserialize,
   decodeTypeByte,
-  BASE16,
 } from "@exodus/walletconnect-utils";
-import { toString } from "uint8arrays";
 
 import { CRYPTO_CONTEXT, CRYPTO_CLIENT_SEED, CRYPTO_JWT_TTL } from "../constants";
 import { KeyChain } from "./keychain";
@@ -139,9 +138,7 @@ export class Crypto implements ICrypto {
 
   public getPayloadSenderPublicKey: ICrypto["getPayloadSenderPublicKey"] = (encoded) => {
     const deserialized = deserialize(encoded);
-    return deserialized.senderPublicKey
-      ? toString(deserialized.senderPublicKey, BASE16)
-      : undefined;
+    return deserialized.senderPublicKey ? uint8array2hex(deserialized.senderPublicKey) : undefined;
   };
 
   // ---------- Private ----------------------------------------------- //
@@ -164,7 +161,7 @@ export class Crypto implements ICrypto {
       seed = generateRandomBytes32();
       await this.keychain.set(CRYPTO_CLIENT_SEED, seed);
     }
-    return fromString(seed, "base16");
+    return hex2uint8array(seed);
   }
 
   private getSymKey(topic: string) {

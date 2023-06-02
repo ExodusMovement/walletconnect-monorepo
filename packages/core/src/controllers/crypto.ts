@@ -80,15 +80,21 @@ export class Crypto implements ICrypto {
     overrideTopic,
   ) => {
     this.isInitialized();
+    if (overrideTopic) {
+      throw new Error("overrideTopic disabled in Exodus fork due to security reasons");
+    }
     const selfPrivateKey = this.getPrivateKey(selfPublicKey);
     const symKey = deriveSymKey(selfPrivateKey, peerPublicKey);
-    return this.setSymKey(symKey, overrideTopic);
+    return this.setSymKey(symKey);
   };
 
   public setSymKey: ICrypto["setSymKey"] = async (symKey, overrideTopic) => {
+    if (overrideTopic) {
+      throw new Error("overrideTopic disabled in Exodus fork due to security reasons");
+    }
     // TODO check if we can remove overrideTopic
     this.isInitialized();
-    const topic = overrideTopic || hashKey(symKey);
+    const topic = hashKey(symKey);
     await this.keychain.set(`sym-${topic}`, symKey);
     return topic;
   };

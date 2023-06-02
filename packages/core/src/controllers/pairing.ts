@@ -122,7 +122,7 @@ export class Pairing implements IPairing {
     const expiry = calcExpiry(FIVE_MINUTES);
     const pairing = { topic, relay, expiry, active: false };
     await this.pairings.set(topic, pairing);
-    await this.core.crypto.setSymKey(symKey, topic);
+    await this.core.crypto.setSymKey(symKey);
     await this.core.relayer.subscribe(topic, { relay });
     this.core.expirer.set(topic, expiry);
 

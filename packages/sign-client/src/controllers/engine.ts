@@ -55,7 +55,6 @@ import {
   isValidRequest,
   isValidRequestExpiry,
   hashMessage,
-  isBrowser,
   isValidRequiredNamespaces,
   isValidResponse,
   isValidString,
@@ -69,7 +68,6 @@ import {
   PROPOSAL_EXPIRY_MESSAGE,
   SESSION_EXPIRY,
   SESSION_REQUEST_EXPIRY_BOUNDARIES,
-  METHODS_TO_VERIFY,
 } from "../constants";
 
 export class Engine extends IEngine {
@@ -442,10 +440,6 @@ export class Engine extends IEngine {
 
   private sendRequest: EnginePrivate["sendRequest"] = async (topic, method, params, expiry) => {
     const payload = formatJsonRpcRequest(method, params);
-    if (isBrowser() && METHODS_TO_VERIFY.includes(method)) {
-      const hash = hashMessage(JSON.stringify(payload));
-      await this.client.core.verify.register({ attestationId: hash });
-    }
     const message = await this.client.core.crypto.encode(topic, payload);
     const opts = ENGINE_RPC_OPTS[method].req;
     if (expiry) opts.ttl = expiry;
@@ -1180,7 +1174,7 @@ export class Engine extends IEngine {
     await this.isValidSessionOrPairingTopic(topic);
   };
 
-  private getVerifyContext = async (hash: string, metadata: CoreTypes.Metadata) => {
+  private getVerifyContext = async (_hash: string, metadata: CoreTypes.Metadata) => {
     const context: Verify.Context = {
       verified: {
         verifyUrl: metadata.verifyUrl || "",
@@ -1189,20 +1183,6 @@ export class Engine extends IEngine {
       },
     };
 
-    try {
-      const origin = await this.client.core.verify.resolve({
-        attestationId: hash,
-        verifyUrl: metadata.verifyUrl,
-      });
-      if (origin) {
-        context.verified.origin = origin;
-        context.verified.validation = origin === metadata.url ? "VALID" : "INVALID";
-      }
-    } catch (e) {
-      this.client.logger.error(e);
-    }
-
-    this.client.logger.info(`Verify context: ${JSON.stringify(context)}`);
     return context;
   };
 

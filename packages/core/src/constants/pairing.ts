@@ -13,7 +13,7 @@ export const PAIRING_RPC_OPTS: Record<
     req: RelayerTypes.PublishOptions;
     res: RelayerTypes.PublishOptions;
   }
-> = {
+> = Object.assign(Object.create(null), {
   wc_pairingDelete: {
     req: {
       ttl: ONE_DAY,
@@ -50,4 +50,4 @@ export const PAIRING_RPC_OPTS: Record<
       tag: 0,
     },
   },
-};
+});

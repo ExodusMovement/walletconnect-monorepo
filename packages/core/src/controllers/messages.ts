@@ -51,6 +51,7 @@ export class MessageTracker extends IMessageTracker {
     let messages = this.messages.get(topic);
     if (typeof messages === "undefined") {
       messages = {};
+      Object.setPrototypeOf(messages, null); // TS hash, Object.create(null) breaks
     }
     if (typeof messages[hash] !== "undefined") {
       return hash;
@@ -66,6 +67,7 @@ export class MessageTracker extends IMessageTracker {
     let messages = this.messages.get(topic);
     if (typeof messages === "undefined") {
       messages = {};
+      Object.setPrototypeOf(messages, null); // TS hash, Object.create(null) breaks
     }
     return messages;
   };

@@ -3,7 +3,7 @@ import { EngineTypes } from "@exodus/walletconnect-types";
 
 export const ENGINE_CONTEXT = "engine";
 
-export const ENGINE_RPC_OPTS: EngineTypes.RpcOptsMap = {
+export const ENGINE_RPC_OPTS: EngineTypes.RpcOptsMap = Object.assign(Object.create(null), {
   wc_sessionPropose: {
     req: {
       ttl: FIVE_MINUTES,
@@ -101,7 +101,7 @@ export const ENGINE_RPC_OPTS: EngineTypes.RpcOptsMap = {
       tag: 1115,
     },
   },
-};
+});
 
 export const SESSION_REQUEST_EXPIRY_BOUNDARIES = {
   min: FIVE_MINUTES,

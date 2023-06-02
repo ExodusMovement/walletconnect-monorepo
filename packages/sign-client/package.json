@@ -1,7 +1,7 @@
 {
   "name": "@exodus/walletconnect-sign-client",
   "description": "Sign Client for WalletConnect Protocol",
-  "version": "2.7.6-exodus.1",
+  "version": "2.7.6-exodus.2",
   "author": "WalletConnect, Inc. <walletconnect.com>",
   "homepage": "https://github.com/walletconnect/walletconnect-monorepo/",
   "license": "Apache-2.0",

@@ -1,7 +1,7 @@
 {
   "name": "@exodus/walletconnect-web3wallet",
   "description": "Web3Wallet for WalletConnect Protocol",
-  "version": "1.7.4-exodus.0",
+  "version": "1.7.4-exodus.1",
   "author": "WalletConnect, Inc. <walletconnect.com>",
   "homepage": "https://github.com/walletconnect/walletconnect-monorepo/",
   "license": "Apache-2.0",

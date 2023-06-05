@@ -72,7 +72,7 @@ export class Engine extends IWeb3WalletEngine {
     return sessions.reduce((sessions, session) => {
       sessions[session.topic] = session;
       return sessions;
-    }, {});
+    }, Object.create(null));
   };
 
   public getPendingSessionProposals: IWeb3WalletEngine["getPendingSessionProposals"] = () => {

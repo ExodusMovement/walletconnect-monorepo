@@ -18,24 +18,24 @@ export class Engine extends IWeb3WalletEngine {
     this.signClient = await SignClient.init({
       core: this.client.core,
       metadata: this.client.metadata,
-      ...options,
+      logger: this.client.logger,
     });
     this.authClient = await AuthClient.init({
       core: this.client.core,
       projectId: "",
       metadata: this.client.metadata,
-      ...options,
+      logger: this.client.logger,
     });
 
     this.initializeEventListeners();
   };
 
-  public pair: IWeb3WalletEngine["pair"] = async (params) => {
+  public pair: IWeb3WalletEngine["pair"] = async params => {
     await this.client.core.pairing.pair(params);
   };
 
   // Sign //
-  public approveSession: IWeb3WalletEngine["approveSession"] = async (sessionProposal) => {
+  public approveSession: IWeb3WalletEngine["approveSession"] = async sessionProposal => {
     const { topic, acknowledged } = await this.signClient.approve({
       id: sessionProposal.id,
       namespaces: sessionProposal.namespaces,
@@ -44,28 +44,28 @@ export class Engine extends IWeb3WalletEngine {
     return this.signClient.session.get(topic);
   };
 
-  public rejectSession: IWeb3WalletEngine["rejectSession"] = async (params) => {
+  public rejectSession: IWeb3WalletEngine["rejectSession"] = async params => {
     return await this.signClient.reject(params);
   };
 
-  public updateSession: IWeb3WalletEngine["updateSession"] = async (params) => {
+  public updateSession: IWeb3WalletEngine["updateSession"] = async params => {
     return await (await this.signClient.update(params)).acknowledged();
   };
 
-  public extendSession: IWeb3WalletEngine["extendSession"] = async (params) => {
+  public extendSession: IWeb3WalletEngine["extendSession"] = async params => {
     return await (await this.signClient.extend(params)).acknowledged();
   };
 
-  public respondSessionRequest: IWeb3WalletEngine["respondSessionRequest"] = async (params) => {
+  public respondSessionRequest: IWeb3WalletEngine["respondSessionRequest"] = async params => {
     const result = await this.signClient.respond(params);
     return result;
   };
 
-  public disconnectSession: IWeb3WalletEngine["disconnectSession"] = async (params) => {
+  public disconnectSession: IWeb3WalletEngine["disconnectSession"] = async params => {
     return await this.signClient.disconnect(params);
   };
 
-  public emitSessionEvent: IWeb3WalletEngine["emitSessionEvent"] = async (params) => {
+  public emitSessionEvent: IWeb3WalletEngine["emitSessionEvent"] = async params => {
     return await this.signClient.emit(params);
   };
 
@@ -93,7 +93,7 @@ export class Engine extends IWeb3WalletEngine {
   public getPendingAuthRequests: IWeb3WalletEngine["getPendingAuthRequests"] = () => {
     return this.authClient.requests
       .getAll()
-      .filter((request) => "requester" in request) as AuthEngineTypes.PendingRequest[];
+      .filter(request => "requester" in request) as AuthEngineTypes.PendingRequest[];
   };
 
   public formatMessage: IWeb3WalletEngine["formatMessage"] = (params, iss) => {

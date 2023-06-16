@@ -2,6 +2,16 @@
 
 Open protocol for connecting Wallets to Dapps - https://walletconnect.com
 
+## Publish
+
+```
+npm install
+cd packages/web3wallet
+npm build
+update version
+npm publish
+```
+
 ## Setup
 
 1. Ensure [nodejs and npm](https://nodejs.org/en/)

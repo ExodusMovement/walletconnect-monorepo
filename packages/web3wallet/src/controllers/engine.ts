@@ -14,15 +14,17 @@ export class Engine extends IWeb3WalletEngine {
     this.authClient = {} as any;
   }
 
-  public init = async () => {
+  public init = async (options = {}) => {
     this.signClient = await SignClient.init({
       core: this.client.core,
       metadata: this.client.metadata,
+      ...options,
     });
     this.authClient = await AuthClient.init({
       core: this.client.core,
       projectId: "",
       metadata: this.client.metadata,
+      ...options,
     });
 
     this.initializeEventListeners();

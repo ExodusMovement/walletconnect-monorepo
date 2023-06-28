@@ -85,7 +85,9 @@ describe("Pairing", () => {
       let { topic, uri } = await coreA.pairing.create();
       coreA.crypto.keychain.set(maliciousTopic, maliciousTopic);
       uri = uri.replace(topic, maliciousTopic);
-      await expect(coreA.pairing.pair({ uri })).rejects.toThrowError(`invalid value for topic`);
+      await expect(coreA.pairing.pair({ uri })).rejects.toThrowError(
+        `Keychain already exists: ${maliciousTopic}`,
+      );
     });
   });
 

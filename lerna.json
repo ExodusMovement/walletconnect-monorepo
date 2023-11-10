@@ -1,6 +1,8 @@
 {
   "npmClient": "npm",
-  "packages": ["packages/*", "providers/*"],
-  "useWorkspaces": true,
-  "version": "2.7.6"
+  "packages": [
+    "packages/*",
+    "providers/*"
+  ],
+  "version": "2.10.4"
 }

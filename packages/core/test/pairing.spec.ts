@@ -1,19 +1,8 @@
 import { expect, describe, it, beforeEach, afterEach } from "vitest";
 import { ICore } from "@exodus/walletconnect-types";
 import { Core, CORE_PROTOCOL, CORE_VERSION } from "../src";
-import { TEST_CORE_OPTIONS, disconnectSocket } from "./shared";
+import { TEST_CORE_OPTIONS, disconnectSocket, waitForEvent } from "./shared";
 import { generateRandomBytes32 } from "@exodus/walletconnect-utils";
-
-const waitForEvent = async (checkForEvent: (...args: any[]) => boolean) => {
-  await new Promise((resolve) => {
-    const intervalId = setInterval(() => {
-      if (checkForEvent()) {
-        clearInterval(intervalId);
-        resolve({});
-      }
-    }, 100);
-  });
-};
 
 const createCoreClients: () => Promise<{ coreA: ICore; coreB: ICore }> = async () => {
   const coreA = new Core(TEST_CORE_OPTIONS);
@@ -65,6 +54,28 @@ describe("Pairing", () => {
       expect(coreB.pairing.getPairings()[0].active).toBe(false);
     });
 
+    it("can pair via provided android deeplink URI", async () => {
+      const { uri } = await coreA.pairing.create();
+      await coreB.pairing.pair({ uri: `wc://${uri}` });
+
+      expect(coreA.pairing.pairings.keys.length).toBe(1);
+      expect(coreB.pairing.pairings.keys.length).toBe(1);
+      expect(coreA.pairing.pairings.keys).to.deep.equal(coreB.pairing.pairings.keys);
+      expect(coreA.pairing.getPairings()[0].active).toBe(false);
+      expect(coreB.pairing.getPairings()[0].active).toBe(false);
+    });
+
+    it("can pair via provided iOS deeplink URI", async () => {
+      const { uri } = await coreA.pairing.create();
+      await coreB.pairing.pair({ uri: `wc:${uri}` });
+
+      expect(coreA.pairing.pairings.keys.length).toBe(1);
+      expect(coreB.pairing.pairings.keys.length).toBe(1);
+      expect(coreA.pairing.pairings.keys).to.deep.equal(coreB.pairing.pairings.keys);
+      expect(coreA.pairing.getPairings()[0].active).toBe(false);
+      expect(coreB.pairing.getPairings()[0].active).toBe(false);
+    });
+
     it("can auto-activate the pairing on pair step", async () => {
       const { uri } = await coreA.pairing.create();
       await coreB.pairing.pair({ uri, activatePairing: true });
@@ -75,13 +86,15 @@ describe("Pairing", () => {
 
     it("throws when pairing is attempted on topic that already exists", async () => {
       const { topic, uri } = await coreA.pairing.create();
+      coreA.pairing.pairings.get(topic).active = true;
       await expect(coreA.pairing.pair({ uri })).rejects.toThrowError(
         `Pairing already exists: ${topic}`,
       );
     });
 
-    it("throws when keychain already exists", async () => {
-      const maliciousTopic = generateRandomBytes32();
+    it("should not override existing keychain values", async () => {
+      const keychainTopic = generateRandomBytes32();
+      const keychainValue = generateRandomBytes32();
       let { topic, uri } = await coreA.pairing.create();
       coreA.crypto.keychain.set(maliciousTopic, maliciousTopic);
       uri = uri.replace(topic, maliciousTopic);

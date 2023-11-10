@@ -11,7 +11,7 @@ import {
   SessionNamespace,
 } from "../types";
 
-import { getChainId, getGlobal, getRpcUrl, handleDeepLinks, validateChainApproval } from "../utils";
+import { getChainId, getGlobal, getRpcUrl } from "../utils";
 import EventEmitter from "events";
 import { PROVIDER_EVENTS } from "../constants";
 
@@ -39,8 +39,7 @@ class Eip155Provider implements IProvider {
       case "eth_accounts":
         return this.getAccounts() as any;
       case "wallet_switchEthereumChain": {
-        this.handleSwitchChain(args.request.params ? args.request.params[0]?.chainId : "0x0");
-        return null as any;
+        return await this.handleSwitchChain(args);
       }
       case "eth_chainId":
         return parseInt(this.getDefaultChain()) as any;
@@ -48,7 +47,6 @@ class Eip155Provider implements IProvider {
         break;
     }
     if (this.namespace.methods.includes(args.request.method)) {
-      handleDeepLinks(this.client, args);
       return await this.client.request(args as EngineTypes.RequestParams);
     }
     return this.getHttpProvider().request(args.request);
@@ -59,19 +57,12 @@ class Eip155Provider implements IProvider {
   }
 
   public setDefaultChain(chainId: string, rpcUrl?: string | undefined) {
-    const parsedChain = getChainId(chainId);
     // http provider exists so just set the chainId
-    if (!this.httpProviders[parsedChain]) {
-      const rpc =
-        rpcUrl ||
-        getRpcUrl(`${this.name}:${parsedChain}`, this.namespace, this.client.core.projectId);
-      if (!rpc) {
-        throw new Error(`No RPC url provided for chainId: ${parsedChain}`);
-      }
-      this.setHttpProvider(parsedChain, rpc);
+    if (!this.httpProviders[chainId]) {
+      this.setHttpProvider(parseInt(chainId), rpcUrl);
     }
-    this.chainId = parsedChain;
-    this.events.emit(PROVIDER_EVENTS.DEFAULT_CHAIN_CHANGED, `${this.name}:${parsedChain}`);
+    this.chainId = parseInt(chainId);
+    this.events.emit(PROVIDER_EVENTS.DEFAULT_CHAIN_CHANGED, `${this.name}:${chainId}`);
   }
 
   public requestAccounts(): string[] {
@@ -96,7 +87,9 @@ class Eip155Provider implements IProvider {
   ): JsonRpcProvider | undefined {
     const rpc =
       rpcUrl || getRpcUrl(`${this.name}:${chainId}`, this.namespace, this.client.core.projectId);
-    if (typeof rpc === "undefined") return undefined;
+    if (!rpc) {
+      throw new Error(`No RPC url provided for chainId: ${chainId}`);
+    }
     const http = new JsonRpcProvider(new HttpConnection(rpc, getGlobal("disableProviderPing")));
     return http;
   }
@@ -111,7 +104,7 @@ class Eip155Provider implements IProvider {
   private createHttpProviders(): RpcProvidersMap {
     const http = {};
     this.namespace.chains.forEach((chain) => {
-      const parsedChain = getChainId(chain);
+      const parsedChain = parseInt(getChainId(chain));
       http[parsedChain] = this.createHttpProvider(parsedChain, this.namespace.rpcMap?.[chain]);
     });
     return http;
@@ -142,11 +135,38 @@ class Eip155Provider implements IProvider {
     return http;
   }
 
-  private handleSwitchChain(newChainId: string) {
-    const chainId = parseInt(newChainId, 16);
-    const caipChainId = `${this.name}:${chainId}`;
-    validateChainApproval(caipChainId, this.namespace.chains);
-    this.setDefaultChain(`${chainId}`);
+  private async handleSwitchChain(args: RequestParams): Promise<any> {
+    let hexChainId = args.request.params ? args.request.params[0]?.chainId : "0x0";
+    hexChainId = hexChainId.startsWith("0x") ? hexChainId : `0x${hexChainId}`;
+    const parsedChainId = parseInt(hexChainId, 16);
+    // if chainId is already approved, switch locally
+    if (this.isChainApproved(parsedChainId)) {
+      this.setDefaultChain(`${parsedChainId}`);
+    } else if (this.namespace.methods.includes("wallet_switchEthereumChain")) {
+      // try to switch chain within the wallet
+      await this.client.request({
+        topic: args.topic,
+        request: {
+          method: args.request.method,
+          params: [
+            {
+              chainId: hexChainId,
+            },
+          ],
+        },
+        chainId: this.namespace.chains?.[0], // Sending a previously unapproved chainId will cause namespace validation failure so we must set request chainId to the first chainId in the namespace to avoid it
+      } as EngineTypes.RequestParams);
+      this.setDefaultChain(`${parsedChainId}`);
+    } else {
+      throw new Error(
+        `Failed to switch to chain 'eip155:${parsedChainId}'. The chain is not approved or the wallet does not support 'wallet_switchEthereumChain' method.`,
+      );
+    }
+    return null;
+  }
+
+  private isChainApproved(chainId: number): boolean {
+    return this.namespace.chains.includes(`${this.name}:${chainId}`);
   }
 }
 

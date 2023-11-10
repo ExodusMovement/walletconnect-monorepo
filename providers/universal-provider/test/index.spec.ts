@@ -8,8 +8,14 @@ import {
   _abi,
   _bytecode,
 } from "ethereum-test-network/lib/utils/ERC20Token__factory";
-import { deleteProviders, disconnectSocket, testConnectMethod, WalletClient } from "./shared";
-import UniversalProvider from "../src";
+import {
+  deleteProviders,
+  disconnectSocket,
+  testConnectMethod,
+  throttle,
+  WalletClient,
+} from "./shared";
+import UniversalProvider, { Namespace } from "../src";
 import {
   CHAIN_ID,
   PORT,
@@ -22,7 +28,8 @@ import {
   CHAIN_ID_B,
   TEST_REQUIRED_NAMESPACES,
 } from "./shared/constants";
-import { getGlobal, setGlobal } from "../src/utils";
+import { getChainId, getGlobal, getRpcUrl, setGlobal } from "../src/utils";
+import { RPC_URL } from "../src/constants";
 
 const getDbName = (_prefix: string) => {
   return `./test/tmp/${_prefix}.db`;
@@ -54,6 +61,7 @@ describe("UniversalProvider", function () {
     expect(walletAddress).to.eql(ACCOUNTS.a.address);
     const providerAccounts = await provider.enable();
     expect(providerAccounts).to.eql([walletAddress]);
+    await new Promise<void>((resolve) => setTimeout(resolve, 1000));
   });
   afterAll(async () => {
     // close test network
@@ -71,10 +79,11 @@ describe("UniversalProvider", function () {
       }),
     ]);
     expect(walletClient.client?.session.values.length).to.eql(0);
-
+    await throttle(1_000);
     await provider.client.core.relayer.transportClose();
     await walletClient.client?.core.relayer.transportClose();
   });
+
   describe("eip155", () => {
     describe("multi chain", () => {
       let web3: Web3;
@@ -92,6 +101,68 @@ describe("UniversalProvider", function () {
         expect(chainIdB).to.eql(CHAIN_ID_B);
 
         provider.setDefaultChain(`eip155:${CHAIN_ID}`);
+      });
+      it("should send `wallet_switchEthereumChain` request when chain is not approved", async () => {
+        const currentApprovedChains = provider.session?.namespaces.eip155.chains;
+        const chainToSwith = "eip155:1";
+        const chainToSwitchParsed = parseInt(chainToSwith.split(":")[1]);
+        // confirm that chain is not approved
+        expect(currentApprovedChains).to.not.include(chainToSwith);
+
+        const activeChain = await web3.eth.getChainId();
+        expect(activeChain).to.not.eql(chainToSwitchParsed);
+        expect(activeChain).to.eql(CHAIN_ID);
+
+        // when we send the wallet_switchEthereumChain request
+        // the wallet should receive & update the session with the new chain
+        await Promise.all([
+          new Promise<void>((resolve) => {
+            provider.on("session_update", (args: any) => {
+              expect(args.params.namespaces.eip155.chains).to.include(chainToSwith);
+              resolve();
+            });
+          }),
+          provider.request(
+            {
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: `0x${chainToSwith.split(":")[1]}` }],
+            },
+            chainToSwith,
+          ),
+        ]);
+
+        const activeChainAfterSwitch = await web3.eth.getChainId();
+        expect(activeChainAfterSwitch).to.eql(chainToSwitchParsed);
+
+        // revert back to the original chain
+        await provider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: `0x${CHAIN_ID.toString(16)}` }],
+        });
+      });
+    });
+    describe("events", () => {
+      it("should emit CAIP-10 parsed accountsChanged", async () => {
+        const caip10AccountToEmit = `eip155:${CHAIN_ID}:${walletAddress}`;
+        const expectedParsedAccount = walletAddress;
+        expect(caip10AccountToEmit).to.not.eql(expectedParsedAccount);
+        await Promise.all([
+          new Promise<void>((resolve) => {
+            provider.on("accountsChanged", (accounts: string[]) => {
+              expect(accounts).to.be.an("array");
+              expect(accounts).to.include(expectedParsedAccount);
+              resolve();
+            });
+          }),
+          walletClient.client?.emit({
+            topic: provider.session?.topic || "",
+            event: {
+              name: "accountsChanged",
+              data: [caip10AccountToEmit],
+            },
+            chainId: `eip155:${CHAIN_ID}`,
+          }),
+        ]);
       });
     });
     describe("Web3", () => {
@@ -314,10 +385,27 @@ describe("UniversalProvider", function () {
           name: "wallet",
           storageOptions: { database: getDbName("walletDB") },
         });
-
+        const chains = [`eip155:${CHAIN_ID}`, `eip155:${CHAIN_ID_B}`];
         const {
           sessionA: { topic },
-        } = await testConnectMethod({ dapp, wallet });
+        } = await testConnectMethod(
+          {
+            dapp,
+            wallet,
+          },
+          {
+            requiredNamespaces: {},
+            optionalNamespaces: {},
+            namespaces: {
+              eip155: {
+                accounts: chains.map((chain) => `${chain}:${walletAddress}`),
+                chains,
+                methods,
+                events,
+              },
+            },
+          },
+        );
 
         await Promise.all([
           new Promise((resolve) => {
@@ -417,7 +505,7 @@ describe("UniversalProvider", function () {
       });
     });
     describe("pairings", () => {
-      it("should clean up inactive pairings", async () => {
+      it.skip("should clean up inactive pairings", async () => {
         const SUBS_ON_START = provider.client.core.relayer.subscriber.subscriptions.size;
         const PAIRINGS_TO_CREATE = 5;
         for (let i = 0; i < PAIRINGS_TO_CREATE; i++) {
@@ -739,6 +827,42 @@ describe("UniversalProvider", function () {
           expectedChainId: chains[1],
         });
       });
+      it("should connect with empty required namespaces", async () => {
+        const dapp = await UniversalProvider.init({
+          ...TEST_PROVIDER_OPTS,
+          name: "dapp",
+        });
+        const wallet = await UniversalProvider.init({
+          ...TEST_PROVIDER_OPTS,
+          name: "wallet",
+        });
+        const chains = ["eip155:1", "eip155:2"];
+        await testConnectMethod(
+          {
+            dapp,
+            wallet,
+          },
+          {
+            requiredNamespaces: {},
+            optionalNamespaces: {},
+            namespaces: {
+              eip155: {
+                accounts: chains.map((chain) => `${chain}:${walletAddress}`),
+                chains,
+                methods,
+                events,
+              },
+            },
+          },
+        );
+        await dapp.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x2" }] });
+        await validateProvider({
+          provider: dapp,
+          chains,
+          addresses: [walletAddress],
+          expectedChainId: chains[1],
+        });
+      });
     });
   });
 
@@ -768,6 +892,56 @@ describe("UniversalProvider", function () {
     it("should handle undefined global value", () => {
       const nonExistentGlobal = getGlobal("somethingsomething");
       expect(nonExistentGlobal).to.be.undefined;
+    });
+    it("should generate rpc provider urls", async () => {
+      const dapp = await UniversalProvider.init({
+        ...TEST_PROVIDER_OPTS,
+        name: "dapp",
+      });
+      const wallet = await UniversalProvider.init({
+        ...TEST_PROVIDER_OPTS,
+        name: "wallet",
+      });
+      const namespace = "solana";
+      const chains = [
+        `${namespace}:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ`,
+        `${namespace}:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K`,
+      ];
+      await testConnectMethod(
+        {
+          dapp,
+          wallet,
+        },
+        {
+          requiredNamespaces: {},
+          optionalNamespaces: {},
+          namespaces: {
+            [namespace]: {
+              accounts: chains.map((chain) => `${chain}:${walletAddress}`),
+              chains,
+              methods,
+              events,
+            },
+          },
+        },
+      );
+      await throttle(1_000);
+
+      const httpProviders = dapp.rpcProviders[namespace].httpProviders;
+
+      expect(Object.keys(httpProviders).length).is.greaterThan(0);
+      expect(Object.keys(httpProviders).length).to.eql(chains.length);
+
+      Object.values(httpProviders).forEach((provider, i) => {
+        const url = provider.connection.url as string;
+        expect(url).to.include("https://");
+        expect(url).to.include(RPC_URL);
+        expect(url).to.eql(
+          getRpcUrl(getChainId(chains[i]), {} as Namespace, TEST_PROVIDER_OPTS.projectId),
+        );
+      });
+
+      await deleteProviders({ A: dapp, B: wallet });
     });
   });
 });

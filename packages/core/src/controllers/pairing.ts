@@ -44,6 +44,7 @@ import {
   PAIRING_RPC_OPTS,
   RELAYER_EVENTS,
   EXPIRER_EVENTS,
+  PAIRING_EVENTS,
 } from "../constants";
 import { Store } from "../controllers/store";
 
@@ -110,26 +111,32 @@ export class Pairing implements IPairing {
     this.isInitialized();
     this.isValidPair(params);
     const { topic, symKey, relay } = parseUri(params.uri);
-
+    let existingPairing;
     if (this.pairings.keys.includes(topic)) {
-      throw new Error(`Pairing already exists: ${topic}`);
+      existingPairing = this.pairings.get(topic);
+      if (existingPairing.active) {
+        throw new Error(
+          `Pairing already exists: ${topic}. Please try again with a new connection URI.`,
+        );
+      }
     }
 
-    if (this.core.crypto.hasKeys(topic)) {
-      throw new Error(`Keychain already exists: ${topic}`);
+    // avoid overwriting keychain pairing already exists
+    if (!this.core.crypto.keychain.has(topic)) {
+      await this.core.crypto.setSymKey(symKey, topic);
+      await this.core.relayer.subscribe(topic, { relay });
     }
 
     const expiry = calcExpiry(FIVE_MINUTES);
     const pairing = { topic, relay, expiry, active: false };
     await this.pairings.set(topic, pairing);
-    await this.core.crypto.setSymKey(symKey);
-    await this.core.relayer.subscribe(topic, { relay });
     this.core.expirer.set(topic, expiry);
 
     if (params.activatePairing) {
       await this.activate({ topic });
     }
 
+    this.events.emit(PAIRING_EVENTS.create, pairing);
     return pairing;
   };
 
@@ -240,18 +247,25 @@ export class Pairing implements IPairing {
     this.core.relayer.on(RELAYER_EVENTS.message, async (event: RelayerTypes.MessageEvent) => {
       const { topic, message } = event;
 
+      // Do not handle if the topic is not related to known pairing topics.
+      if (!this.pairings.keys.includes(topic)) return;
+
       // messages of certain types should be ignored as they are handled by their respective SDKs
-      if (this.ignoredPayloadTypes.includes(this.core.crypto.getPayloadType(message))) {
-        return;
-      }
+      if (this.ignoredPayloadTypes.includes(this.core.crypto.getPayloadType(message))) return;
 
       const payload = await this.core.crypto.decode(topic, message);
-      if (isJsonRpcRequest(payload)) {
-        this.core.history.set(topic, payload);
-        this.onRelayEventRequest({ topic, payload });
-      } else if (isJsonRpcResponse(payload)) {
-        await this.core.history.resolve(payload);
-        this.onRelayEventResponse({ topic, payload });
+
+      try {
+        if (isJsonRpcRequest(payload)) {
+          this.core.history.set(topic, payload);
+          this.onRelayEventRequest({ topic, payload });
+        } else if (isJsonRpcResponse(payload)) {
+          await this.core.history.resolve(payload);
+          await this.onRelayEventResponse({ topic, payload });
+          this.core.history.delete(topic, payload.id);
+        }
+      } catch (error) {
+        this.logger.error(error);
       }
     });
   }
@@ -259,8 +273,6 @@ export class Pairing implements IPairing {
   private onRelayEventRequest: IPairingPrivate["onRelayEventRequest"] = (event) => {
     const { topic, payload } = event;
     const reqMethod = payload.method as PairingJsonRpcTypes.WcMethod;
-
-    if (!this.pairings.keys.includes(topic)) return;
 
     switch (reqMethod) {
       case "wc_pairingPing":
@@ -276,8 +288,6 @@ export class Pairing implements IPairing {
     const { topic, payload } = event;
     const record = await this.core.history.get(topic, payload.id);
     const resMethod = record.request.method as PairingJsonRpcTypes.WcMethod;
-
-    if (!this.pairings.keys.includes(topic)) return;
 
     switch (resMethod) {
       case "wc_pairingPing":
@@ -295,7 +305,7 @@ export class Pairing implements IPairing {
     try {
       this.isValidPing({ topic });
       await this.sendResult<"wc_pairingPing">(id, topic, true);
-      this.events.emit("pairing_ping", { id, topic });
+      this.events.emit(PAIRING_EVENTS.ping, { id, topic });
     } catch (err: any) {
       await this.sendError(id, topic, err);
       this.logger.error(err);
@@ -323,7 +333,7 @@ export class Pairing implements IPairing {
     try {
       this.isValidDisconnect({ topic });
       await this.deletePairing(topic);
-      this.events.emit("pairing_delete", { id, topic });
+      this.events.emit(PAIRING_EVENTS.delete, { id, topic });
     } catch (err: any) {
       await this.sendError(id, topic, err);
       this.logger.error(err);
@@ -359,12 +369,10 @@ export class Pairing implements IPairing {
   private registerExpirerEvents() {
     this.core.expirer.on(EXPIRER_EVENTS.expired, async (event: ExpirerTypes.Expiration) => {
       const { topic } = parseExpirerTarget(event.target);
-      if (topic) {
-        if (this.pairings.keys.includes(topic)) {
-          await this.deletePairing(topic, true);
-          this.events.emit("pairing_expire", { topic });
-        }
-      }
+      if (!topic) return;
+      if (!this.pairings.keys.includes(topic)) return;
+      await this.deletePairing(topic, true);
+      this.events.emit(PAIRING_EVENTS.expire, { topic });
     });
   }
 

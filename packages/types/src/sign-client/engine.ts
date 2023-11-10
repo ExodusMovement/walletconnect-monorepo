@@ -128,6 +128,11 @@ export declare namespace EngineTypes {
   }
 
   type RpcOptsMap = Record<JsonRpcTypes.WcMethod, RpcOpts>;
+
+  type EngineQueue<T> = {
+    state: "IDLE" | "ACTIVE";
+    queue: T[];
+  };
 }
 
 export abstract class IEngineEvents extends EventEmitter {
@@ -149,24 +154,30 @@ export abstract class IEngineEvents extends EventEmitter {
 // -- private method interface -------------------------------------- //
 
 export interface EnginePrivate {
-  sendRequest<M extends JsonRpcTypes.WcMethod>(
-    topic: string,
-    method: M,
-    params: JsonRpcTypes.RequestParams[M],
-    expiry?: number,
-  ): Promise<number>;
+  sendRequest<M extends JsonRpcTypes.WcMethod>(args: {
+    topic: string;
+    method: M;
+    params: JsonRpcTypes.RequestParams[M];
+    expiry?: number;
+    relayRpcId?: number;
+    clientRpcId?: number;
+    throwOnFailedPublish?: boolean;
+  }): Promise<number>;
 
-  sendResult<M extends JsonRpcTypes.WcMethod>(
-    id: number,
-    topic: string,
-    result: JsonRpcTypes.Results[M],
-  ): Promise<void>;
+  sendResult<M extends JsonRpcTypes.WcMethod>(args: {
+    id: number;
+    topic: string;
+    result: JsonRpcTypes.Results[M];
+    throwOnFailedPublish?: boolean;
+  }): Promise<void>;
 
   sendError(id: number, topic: string, error: JsonRpcTypes.Error): Promise<void>;
 
   onRelayEventRequest(event: EngineTypes.EventCallback<JsonRpcRequest>): void;
 
   onRelayEventResponse(event: EngineTypes.EventCallback<JsonRpcResponse>): Promise<void>;
+
+  onRelayEventUnknownPayload(event: EngineTypes.EventCallback<any>): Promise<void>;
 
   deleteSession(topic: string, expirerHasDeleted?: boolean): Promise<void>;
 

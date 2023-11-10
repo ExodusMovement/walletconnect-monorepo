@@ -1,3 +1,4 @@
+import { RELAYER_FAILOVER_RELAY_URL } from "./../src/constants/relayer";
 import { expect, describe, it, beforeEach, afterEach } from "vitest";
 import { getDefaultLoggerOptions, pino } from "@exodus/walletconnect-logger";
 import { JsonRpcProvider } from "@exodus/walletconnect-jsonrpc-provider";
@@ -13,10 +14,10 @@ import {
   SUBSCRIBER_EVENTS,
 } from "../src";
 import { disconnectSocket, TEST_CORE_OPTIONS, throttle } from "./shared";
-import { ICore, IRelayer } from "@exodus/walletconnect-types";
+import { ICore, IRelayer, ISubscriber } from "@exodus/walletconnect-types";
 import Sinon from "sinon";
 import { JsonRpcRequest } from "@exodus/walletconnect-jsonrpc-utils";
-import { generateRandomBytes32 } from "@exodus/walletconnect-utils";
+import { generateRandomBytes32, hashMessage } from "@exodus/walletconnect-utils";
 
 describe("Relayer", () => {
   const logger = pino(getDefaultLoggerOptions({ level: CORE_DEFAULT.logger }));
@@ -145,6 +146,38 @@ describe("Relayer", () => {
       expect(spy.calledOnceWith("abc123")).to.be.true;
       expect(id).to.eq("mock-id");
     });
+
+    it("should subscribe multiple topics", async () => {
+      const spy = Sinon.spy(() => "mock-id");
+      relayer.subscriber.subscribe = spy;
+      const subscriber = relayer.subscriber as ISubscriber;
+      // record the number of listeners before subscribing
+      const startNumListeners = subscriber.events.listenerCount(SUBSCRIBER_EVENTS.created);
+      const topicsToSubscribe = Array.from(Array(5).keys()).map(() => generateRandomBytes32());
+      const subscribePromises = topicsToSubscribe.map((topic) => relayer.subscribe(topic));
+      const onSubscriptionCreatedPromises = topicsToSubscribe.map((topic) =>
+        relayer.subscriber.events.emit(SUBSCRIBER_EVENTS.created, { topic }),
+      );
+      await Promise.all([...subscribePromises, ...onSubscriptionCreatedPromises]);
+      // expect the number of listeners to be the same as before subscribing to confirm proper cleanup
+      expect(subscriber.events.listenerCount(SUBSCRIBER_EVENTS.created)).to.eq(startNumListeners);
+    });
+
+    it("should be able to resubscribe on topic that already exists", async () => {
+      const topic = generateRandomBytes32();
+      const id = await relayer.subscribe(topic);
+      const expectedId = hashMessage(topic + (await core.crypto.getClientId()));
+      const a = await relayer.subscribe(topic);
+      const b = await relayer.subscribe(topic);
+      const c = await relayer.subscribe(topic);
+      expect(a).to.equal(id);
+      expect(a).to.equal(b);
+      expect(b).to.equal(c);
+      expect(a).to.equal(expectedId);
+      expect(b).to.equal(expectedId);
+      expect(c).to.equal(expectedId);
+      expect(id).to.equal(expectedId);
+    });
   });
 
   describe("unsubscribe", () => {
@@ -258,6 +291,17 @@ describe("Relayer", () => {
         await relayer.subscriber.subscribe(topic);
         await throttle(RELAYER_TRANSPORT_CUTOFF + 1_000); // +1 sec buffer
         expect(relayer.connected).to.be.true;
+      });
+      it(`should fall back to ${RELAYER_FAILOVER_RELAY_URL} if the default relayUrl is not reachable`, async () => {
+        relayer = new Relayer({
+          core,
+          relayUrl: "wss://relay.blocked.not.real",
+          projectId: TEST_CORE_OPTIONS.projectId,
+        });
+        await relayer.init();
+        const wsConnection = relayer.provider.connection as unknown as WebSocket;
+        expect(relayer.connected).to.be.true;
+        expect(wsConnection.url.startsWith(RELAYER_FAILOVER_RELAY_URL)).to.be.true;
       });
     });
   });

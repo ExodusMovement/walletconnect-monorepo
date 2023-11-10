@@ -44,7 +44,10 @@ export const uploadCanaryResultsToCloudWatch = async (
       Value: isTestPassed ? 0 : 1,
       Timestamp: ts,
     },
-    {
+  ];
+
+  if (isTestPassed) {
+    metrics.push({
       MetricName: `${metricsPrefix}.latency`,
       Dimensions: [
         {
@@ -59,8 +62,8 @@ export const uploadCanaryResultsToCloudWatch = async (
       Unit: "Milliseconds",
       Value: testDurationMs,
       Timestamp: ts,
-    },
-  ];
+    });
+  }
 
   const latencies = otherLatencies.map((metric) => {
     const metricName = Object.keys(metric)[0];
@@ -90,7 +93,7 @@ export const uploadCanaryResultsToCloudWatch = async (
   await new Promise<void>((resolve) => {
     cloudwatch.putMetricData(params, function (err: Error) {
       if (err) {
-        console.error(err, err.stack);
+        console.error("Failed to upload metrics to CloudWatch", err, err.stack);
         // Swallow error as
         // Test shouldn't fail despite CW failing
         // we will report on missing metrics
@@ -169,10 +172,12 @@ export const uploadLoadTestConnectionDataToCloudWatch = async (
   await new Promise<void>((resolve) => {
     cloudwatch.putMetricData(params, function (err: Error) {
       if (err) {
-        console.warn(err, err.stack);
+        console.warn("Failed to upload metrics to CloudWatch", err, err.stack);
         // Swallow error as
         // Test shouldn't fail despite CW failing
         // we will report on missing metrics
+      } else {
+        console.log("Successfully uploaded metrics to CloudWatch");
       }
       resolve();
     });

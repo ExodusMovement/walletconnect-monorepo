@@ -13,12 +13,15 @@ import { EventEmitter } from "events";
 
 import { PUBLISHER_CONTEXT, PUBLISHER_DEFAULT_TTL, RELAYER_EVENTS } from "../constants";
 import { getBigIntRpcId } from "@exodus/walletconnect-jsonrpc-utils";
+import { TEN_SECONDS, toMiliseconds } from "@exodus/walletconnect-time";
 
 export class Publisher extends IPublisher {
   public events = new EventEmitter();
   public name = PUBLISHER_CONTEXT;
   public queue = new Map<string, PublisherTypes.Params>();
-  private publishTimeout = 10_000;
+
+  private publishTimeout = toMiliseconds(TEN_SECONDS);
+  private needsTransportRestart = false;
 
   constructor(public relayer: IRelayer, public logger: Logger) {
     super(relayer, logger);
@@ -41,18 +44,28 @@ export class Publisher extends IPublisher {
       const tag = opts?.tag || 0;
       const id = opts?.id || (getBigIntRpcId().toString() as any);
       const params = { topic, message, opts: { ttl, relay, prompt, tag, id } };
-      this.queue.set(id, params);
+      // delay adding to queue to avoid cases where heartbeat might pulse right after publish resulting in duplicate publish
+      const queueTimeout = setTimeout(() => this.queue.set(id, params), this.publishTimeout);
       try {
         const publish = await createExpiringPromise(
           this.rpcPublish(topic, message, ttl, relay, prompt, tag, id),
           this.publishTimeout,
+          "Failed to publish payload, please try again.",
         );
         await publish;
+        this.removeRequestFromQueue(id);
         this.relayer.events.emit(RELAYER_EVENTS.publish, params);
       } catch (err) {
         this.logger.debug(`Publishing Payload stalled`);
-        this.relayer.events.emit(RELAYER_EVENTS.connection_stalled);
+        this.needsTransportRestart = true;
+        if (opts?.internal?.throwOnFailedPublish) {
+          // remove the request from the queue so it's not retried automatically
+          this.removeRequestFromQueue(id);
+          throw err;
+        }
         return;
+      } finally {
+        clearTimeout(queueTimeout);
       }
       this.logger.debug(`Successfully Published Payload`);
       this.logger.trace({ type: "method", method: "publish", params: { topic, message, opts } });
@@ -109,7 +122,7 @@ export class Publisher extends IPublisher {
     return this.relayer.request(request);
   }
 
-  private onPublish(id: string) {
+  private removeRequestFromQueue(id: string) {
     this.queue.delete(id);
   }
 
@@ -122,10 +135,17 @@ export class Publisher extends IPublisher {
 
   private registerEventListeners() {
     this.relayer.core.heartbeat.on(HEARTBEAT_EVENTS.pulse, () => {
+      // restart the transport if needed
+      // queue will be processed on the next pulse
+      if (this.needsTransportRestart) {
+        this.needsTransportRestart = false;
+        this.relayer.events.emit(RELAYER_EVENTS.connection_stalled);
+        return;
+      }
       this.checkQueue();
     });
     this.relayer.on(RELAYER_EVENTS.message_ack, (event: JsonRpcPayload) => {
-      this.onPublish(event.id.toString());
+      this.removeRequestFromQueue(event.id.toString());
     });
   }
 }

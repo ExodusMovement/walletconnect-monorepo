@@ -57,8 +57,8 @@ describe("Persistence", () => {
       expect(searchRecords(coreB.history.records, topic)).toBe(false);
 
       // ensure that keychain is updated
-      expect(coreA.crypto.keychain.keychain.has(topic)).toBe(true);
-      expect(coreB.crypto.keychain.keychain.has(topic)).toBe(true);
+      expect(coreA.crypto.keychain.keychain.has(`sym-${topic}`)).toBe(true);
+      expect(coreB.crypto.keychain.keychain.has(`sym-${topic}`)).toBe(true);
 
       // ensure that expiry is updated
       expect(coreA.expirer.values.length).toBe(1);

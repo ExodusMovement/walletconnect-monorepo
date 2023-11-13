@@ -20,8 +20,5 @@ export abstract class IVerify {
 
   public abstract register(params: { attestationId: string }): Promise<void>;
 
-  public abstract resolve(params: {
-    attestationId: string;
-    verifyUrl?: string;
-  }): Promise<any>;
+  public abstract resolve(params: { attestationId: string; verifyUrl?: string }): Promise<any>;
 }

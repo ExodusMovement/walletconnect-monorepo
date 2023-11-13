@@ -1,8 +1,8 @@
-import { pino, getDefaultLoggerOptions } from "@walletconnect/logger";
+import { pino, getDefaultLoggerOptions } from "@exodus/walletconnect-logger";
 import { vi, expect, describe, it, beforeEach, afterEach } from "vitest";
-import { calcExpiry } from "@walletconnect/utils";
-import { THIRTY_DAYS, toMiliseconds } from "@walletconnect/time";
-import { ICore, JsonRpcRecord } from "@walletconnect/types";
+import { calcExpiry } from "@exodus/walletconnect-utils";
+import { THIRTY_DAYS, toMiliseconds } from "@exodus/walletconnect-time";
+import { ICore, JsonRpcRecord } from "@exodus/walletconnect-types";
 
 import {
   Core,

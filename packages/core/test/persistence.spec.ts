@@ -1,5 +1,5 @@
 import { expect, describe, it, beforeEach, afterEach } from "vitest";
-import { ICore, IStore } from "@walletconnect/types";
+import { ICore, IStore } from "@exodus/walletconnect-types";
 import {
   MockStoreValue,
   TEST_CORE_OPTIONS,
@@ -12,7 +12,7 @@ import {
   waitForEvent,
 } from "./shared";
 import { Core } from "../src";
-import { generateRandomBytes32 } from "@walletconnect/utils";
+import { generateRandomBytes32 } from "@exodus/walletconnect-utils";
 
 describe("Persistence", () => {
   let core: ICore;

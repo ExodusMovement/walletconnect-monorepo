@@ -1,5 +1,5 @@
-import { getDefaultLoggerOptions, pino } from "@walletconnect/logger";
-import { CoreTypes, ICore } from "@walletconnect/types";
+import { getDefaultLoggerOptions, pino } from "@exodus/walletconnect-logger";
+import { CoreTypes, ICore } from "@exodus/walletconnect-types";
 import { DEFAULT_DB_NAME, MOCK_STORE_NAME, TEST_CORE_OPTIONS, storeTestValues } from "./values";
 import { Core, Store } from "../../src";
 

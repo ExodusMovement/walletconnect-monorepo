@@ -3,8 +3,8 @@ import { generateChildLogger, getLoggerContext, Logger } from "@exodus/walletcon
 import { IJsonRpcHistory, JsonRpcRecord, RequestEvent, ICore } from "@exodus/walletconnect-types";
 import { calcExpiry, getInternalError } from "@exodus/walletconnect-utils";
 import { EventEmitter } from "events";
-import { THIRTY_DAYS, toMiliseconds } from "@walletconnect/time";
-import { HEARTBEAT_EVENTS } from "@walletconnect/heartbeat";
+import { THIRTY_DAYS, toMiliseconds } from "@exodus/walletconnect-time";
+import { HEARTBEAT_EVENTS } from "@exodus/walletconnect-heartbeat";
 import {
   CORE_STORAGE_PREFIX,
   HISTORY_CONTEXT,

@@ -4,7 +4,6 @@ import {
   PAIRING_EVENTS,
   RELAYER_DEFAULT_PROTOCOL,
   RELAYER_EVENTS,
-  VERIFY_SERVER,
 } from "@exodus/walletconnect-core";
 
 import {
@@ -16,6 +15,7 @@ import {
   isJsonRpcRequest,
   isJsonRpcResponse,
   isJsonRpcResult,
+  JsonRpcRequest,
 } from "@exodus/walletconnect-jsonrpc-utils";
 import { FIVE_MINUTES, ONE_SECOND, toMiliseconds } from "@exodus/walletconnect-time";
 import {
@@ -1436,7 +1436,7 @@ export class Engine extends IEngine {
   private getVerifyContext = async (_hash: string, metadata: CoreTypes.Metadata) => {
     const context: Verify.Context = {
       verified: {
-        verifyUrl: metadata.verifyUrl || VERIFY_SERVER,
+        verifyUrl: metadata.verifyUrl || "",
         validation: "UNKNOWN",
         origin: metadata.url || "",
       },

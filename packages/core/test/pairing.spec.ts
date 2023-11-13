@@ -93,8 +93,7 @@ describe("Pairing", () => {
     });
 
     it("should not override existing keychain values", async () => {
-      const keychainTopic = generateRandomBytes32();
-      const keychainValue = generateRandomBytes32();
+      const maliciousTopic = generateRandomBytes32();
       let { topic, uri } = await coreA.pairing.create();
       coreA.crypto.keychain.set(maliciousTopic, maliciousTopic);
       uri = uri.replace(topic, maliciousTopic);

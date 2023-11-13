@@ -1,7 +1,7 @@
-import { pino, getDefaultLoggerOptions } from "@walletconnect/logger";
+import { pino, getDefaultLoggerOptions } from "@exodus/walletconnect-logger";
 import { expect, describe, it } from "vitest";
 import { calcExpiry, formatExpirerTarget } from "@exodus/walletconnect-utils";
-import { HEARTBEAT_EVENTS } from "@walletconnect/heartbeat";
+import { HEARTBEAT_EVENTS } from "@exodus/walletconnect-heartbeat";
 
 import {
   Core,

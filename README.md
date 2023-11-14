@@ -6,8 +6,8 @@ Open protocol for connecting Wallets to Dapps - https://walletconnect.com
 
 ```
 npm install
-cd packages/web3wallet
-npm build
+cd packages/<name>
+npm run build
 update version
 npm publish
 ```

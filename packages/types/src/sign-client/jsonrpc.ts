@@ -1,4 +1,4 @@
-import { ErrorResponse, JsonRpcResult } from "@walletconnect/jsonrpc-types";
+import { ErrorResponse, JsonRpcResult } from "@exodus/walletconnect-jsonrpc-types";
 import { SignClientTypes } from "./client";
 import { RelayerTypes } from "../core/relayer";
 import { SessionTypes } from "./session";

@@ -1,18 +1,16 @@
 name: pull request checks
 
-on:
-  pull_request:
-    branches:
-      - v2.0
+on: push
 
 jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    if: github.event.action == 'opened' || github.event.action == 'synchronize'
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name: Authenticate with private NPM package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: setup-node
         uses: actions/setup-node@v4
         with:
@@ -46,6 +44,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name: Authenticate with private NPM package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: setup-node
         uses: actions/setup-node@v4
         with:
@@ -67,14 +67,14 @@ jobs:
           - packages/core
           - packages/web3wallet
           - packages/utils
-          - providers/universal-provider
-          - providers/ethereum-provider
     env:
       TEST_RELAY_URL: ${{ secrets.TEST_RELAY_URL }}
       TEST_PROJECT_ID: ${{ secrets.TEST_PROJECT_ID }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
+      - name: Authenticate with private NPM package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: setup-node
         uses: actions/setup-node@v4
         with:

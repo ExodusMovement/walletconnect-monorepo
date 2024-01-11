@@ -1,4 +1,4 @@
-import { createExpiringPromise, getSdkError } from "@walletconnect/utils";
+import { createExpiringPromise, getSdkError } from "@exodus/walletconnect-utils";
 import { expect, describe, it, beforeAll, afterAll } from "vitest";
 import {
   initTwoClients,
@@ -10,7 +10,7 @@ import {
   TESTS_CONNECT_TIMEOUT,
   initTwoPairedClients,
 } from "../../shared";
-import { EngineTypes, PairingTypes, SessionTypes } from "@walletconnect/types";
+import { EngineTypes, PairingTypes, SessionTypes } from "@exodus/walletconnect-types";
 
 describe("Sign Client Events Validation", () => {
   let clients: Clients;

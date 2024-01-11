@@ -1,13 +1,11 @@
 {
-  "name": "@walletconnect/types",
+  "name": "@exodus/walletconnect-types",
   "description": "Typings for WalletConnect Protocol",
-  "version": "2.11.0",
+  "version": "2.11.0-exodus.0",
   "author": "WalletConnect, Inc. <walletconnect.com>",
   "homepage": "https://github.com/walletconnect/walletconnect-monorepo/",
   "license": "Apache-2.0",
   "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
-  "unpkg": "dist/index.umd.js",
   "types": "dist/types/index.d.ts",
   "sideEffects": false,
   "files": [
@@ -27,11 +25,11 @@
     "prettier": "prettier --check 'src/**/*.{js,ts,jsx,tsx}'"
   },
   "dependencies": {
-    "@walletconnect/events": "^1.0.1",
-    "@walletconnect/heartbeat": "1.2.1",
-    "@walletconnect/jsonrpc-types": "1.0.3",
-    "@walletconnect/keyvaluestorage": "^1.1.1",
-    "@walletconnect/logger": "^2.0.1",
+    "@exodus/walletconnect-events": "^1.0.1-exodus.0",
+    "@exodus/walletconnect-heartbeat": "^1.2.1-exodus.0",
+    "@exodus/walletconnect-jsonrpc-types": "^1.0.3-exodus.0",
+    "@exodus/walletconnect-keyvaluestorage": "^1.0.2-exodus.0",
+    "@exodus/walletconnect-logger": "^2.0.1-exodus.1",
     "events": "^3.3.0"
   }
 }

@@ -11,13 +11,10 @@
   },
   "license": "Apache-2.0",
   "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
-  "unpkg": "dist/index.umd.js",
   "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
-      "module": "./dist/index.es.js",
       "default": "./dist/index.cjs.js"
     }
   },
@@ -41,13 +38,13 @@
   },
   "dependencies": {
     "@walletconnect/jsonrpc-http-connection": "^1.0.7",
-    "@walletconnect/jsonrpc-provider": "1.0.13",
-    "@walletconnect/jsonrpc-types": "^1.0.2",
-    "@walletconnect/jsonrpc-utils": "^1.0.7",
-    "@walletconnect/logger": "^2.0.1",
-    "@walletconnect/sign-client": "2.11.0",
-    "@walletconnect/types": "2.11.0",
-    "@walletconnect/utils": "2.11.0",
+    "@exodus/walletconnect-jsonrpc-provider": "^1.0.13-exodus.1",
+    "@exodus/walletconnect-jsonrpc-types": "^1.0.2-exodus.0",
+    "@exodus/walletconnect-jsonrpc-utils": "^1.0.8-exodus.0",
+    "@exodus/walletconnect-logger": "^2.0.1-exodus.1",
+    "@exodus/walletconnect-sign-client": "^2.11.0-exodus.0",
+    "@exodus/walletconnect-types": "^2.11.0-exodus.0",
+    "@exodus/walletconnect-utils": "^2.11.0-exodus.0",
     "events": "^3.3.0"
   },
   "devDependencies": {

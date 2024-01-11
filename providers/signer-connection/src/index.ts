@@ -1,13 +1,18 @@
-import SignClient from "@walletconnect/sign-client";
-import { IJsonRpcConnection } from "@walletconnect/jsonrpc-types";
-import { formatJsonRpcError, formatJsonRpcResult } from "@walletconnect/jsonrpc-utils";
-import { SignClientTypes, ISignClient, SessionTypes, ProposalTypes } from "@walletconnect/types";
+import SignClient from "@exodus/walletconnect-sign-client";
+import { IJsonRpcConnection } from "@exodus/walletconnect-jsonrpc-types";
+import { formatJsonRpcError, formatJsonRpcResult } from "@exodus/walletconnect-jsonrpc-utils";
+import {
+  SignClientTypes,
+  ISignClient,
+  SessionTypes,
+  ProposalTypes,
+} from "@exodus/walletconnect-types";
 import {
   getSdkError,
   getAccountsFromNamespaces,
   getChainsFromNamespaces,
   getChainsFromRequiredNamespaces,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { EventEmitter } from "events";
 
 function isClient(opts?: SignerConnectionClientOpts): opts is SignClient {

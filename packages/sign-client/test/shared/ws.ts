@@ -1,4 +1,4 @@
-import { ICore } from "@walletconnect/types";
+import { ICore } from "@exodus/walletconnect-types";
 
 export async function disconnectSocket(core: ICore) {
   if (core.relayer.connected) {

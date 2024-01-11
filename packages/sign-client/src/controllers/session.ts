@@ -1,6 +1,6 @@
-import { Store } from "@walletconnect/core";
-import { Logger } from "@walletconnect/logger";
-import { ICore, SessionTypes } from "@walletconnect/types";
+import { Store } from "@exodus/walletconnect-core";
+import { Logger } from "@exodus/walletconnect-logger";
+import { ICore, SessionTypes } from "@exodus/walletconnect-types";
 
 import { SIGN_CLIENT_STORAGE_PREFIX, SESSION_CONTEXT } from "../constants";
 

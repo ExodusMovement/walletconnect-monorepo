@@ -2,10 +2,10 @@ import { describe, it } from "vitest";
 
 // import "mocha";
 // import * as chai from "chai";
-// import { JsonRpcProvider } from "@walletconnect/jsonrpc-provider";
-// import { formatJsonRpcResult } from "@walletconnect/jsonrpc-utils";
-// import { SignClient, SIGN_CLIENT_EVENTS } from "@walletconnect/sign-client";
-// import { ISignClient, RequestEvent, SessionTypes } from "@walletconnect/types";
+// import { JsonRpcProvider } from "@exodus/walletconnect-jsonrpc-provider";
+// import { formatJsonRpcResult } from "@exodus/walletconnect-jsonrpc-utils";
+// import { SignClient, SIGN_CLIENT_EVENTS } from "@exodus/walletconnect-sign-client";
+// import { ISignClient, RequestEvent, SessionTypes } from "@exodus/walletconnect-types";
 
 // import { SignerConnection, SIGNER_EVENTS } from "../src";
 

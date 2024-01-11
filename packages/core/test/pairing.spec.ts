@@ -1,8 +1,8 @@
 import { expect, describe, it, beforeEach, afterEach } from "vitest";
-import { ICore } from "@walletconnect/types";
+import { ICore } from "@exodus/walletconnect-types";
 import { Core, CORE_PROTOCOL, CORE_VERSION, PAIRING_EVENTS, SUBSCRIBER_EVENTS } from "../src";
 import { TEST_CORE_OPTIONS, disconnectSocket, waitForEvent } from "./shared";
-import { generateRandomBytes32, parseUri } from "@walletconnect/utils";
+import { generateRandomBytes32, parseUri } from "@exodus/walletconnect-utils";
 
 const createCoreClients: () => Promise<{ coreA: ICore; coreB: ICore }> = async () => {
   const coreA = new Core(TEST_CORE_OPTIONS);
@@ -93,13 +93,11 @@ describe("Pairing", () => {
     });
 
     it("should not override existing keychain values", async () => {
-      const keychainTopic = generateRandomBytes32();
-      const keychainValue = generateRandomBytes32();
+      const maliciousTopic = generateRandomBytes32();
       let { topic, uri } = await coreA.pairing.create();
-      coreA.crypto.keychain.set(keychainTopic, keychainValue);
-      uri = uri.replace(topic, keychainTopic);
-      await coreA.pairing.pair({ uri });
-      expect(coreA.crypto.keychain.get(keychainTopic)).toBe(keychainValue);
+      coreA.crypto.keychain.set(maliciousTopic, maliciousTopic);
+      uri = uri.replace(topic, maliciousTopic);
+      await expect(coreA.pairing.pair({ uri })).rejects.toThrowError(`invalid value for topic`);
     });
   });
 

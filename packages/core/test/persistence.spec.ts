@@ -1,5 +1,5 @@
 import { expect, describe, it, beforeEach, afterEach } from "vitest";
-import { ICore, IStore } from "@walletconnect/types";
+import { ICore, IStore } from "@exodus/walletconnect-types";
 import {
   MockStoreValue,
   TEST_CORE_OPTIONS,
@@ -12,7 +12,7 @@ import {
   waitForEvent,
 } from "./shared";
 import { Core } from "../src";
-import { generateRandomBytes32 } from "@walletconnect/utils";
+import { generateRandomBytes32 } from "@exodus/walletconnect-utils";
 
 describe("Persistence", () => {
   let core: ICore;
@@ -57,8 +57,8 @@ describe("Persistence", () => {
       expect(searchRecords(coreB.history.records, topic)).toBe(false);
 
       // ensure that keychain is updated
-      expect(coreA.crypto.keychain.keychain.has(topic)).toBe(true);
-      expect(coreB.crypto.keychain.keychain.has(topic)).toBe(true);
+      expect(coreA.crypto.keychain.keychain.has(`sym-${topic}`)).toBe(true);
+      expect(coreB.crypto.keychain.keychain.has(`sym-${topic}`)).toBe(true);
 
       // ensure that expiry is updated
       expect(coreA.expirer.values.length).toBe(1);

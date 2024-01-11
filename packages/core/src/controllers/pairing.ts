@@ -1,4 +1,4 @@
-import { generateChildLogger, getLoggerContext, Logger } from "@walletconnect/logger";
+import { generateChildLogger, getLoggerContext, Logger } from "@exodus/walletconnect-logger";
 import {
   ICore,
   PairingTypes,
@@ -8,7 +8,7 @@ import {
   RelayerTypes,
   PairingJsonRpcTypes,
   ExpirerTypes,
-} from "@walletconnect/types";
+} from "@exodus/walletconnect-types";
 import {
   getInternalError,
   parseUri,
@@ -24,7 +24,7 @@ import {
   isExpired,
   parseExpirerTarget,
   TYPE_1,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import {
   formatJsonRpcRequest,
   formatJsonRpcResult,
@@ -33,8 +33,8 @@ import {
   isJsonRpcResponse,
   isJsonRpcResult,
   isJsonRpcError,
-} from "@walletconnect/jsonrpc-utils";
-import { FIVE_MINUTES, THIRTY_DAYS } from "@walletconnect/time";
+} from "@exodus/walletconnect-jsonrpc-utils";
+import { FIVE_MINUTES, THIRTY_DAYS } from "@exodus/walletconnect-time";
 import EventEmitter from "events";
 import {
   PAIRING_CONTEXT,

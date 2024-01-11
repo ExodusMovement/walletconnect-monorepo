@@ -1,4 +1,4 @@
-import { SignClientTypes } from "@walletconnect/types";
+import { SignClientTypes } from "@exodus/walletconnect-types";
 import { EthereumProvider } from "./EthereumProvider";
 
 export interface ProviderRpcError extends Error {

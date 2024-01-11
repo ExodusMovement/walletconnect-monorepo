@@ -1,6 +1,6 @@
-import SignClient from "@walletconnect/sign-client";
-import { SessionTypes } from "@walletconnect/types";
-import { JsonRpcResult } from "@walletconnect/jsonrpc-types";
+import SignClient from "@exodus/walletconnect-sign-client";
+import { SessionTypes } from "@exodus/walletconnect-types";
+import { JsonRpcResult } from "@exodus/walletconnect-jsonrpc-types";
 
 import {
   RpcProvidersMap,

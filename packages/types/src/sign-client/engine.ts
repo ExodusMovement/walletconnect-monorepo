@@ -4,7 +4,7 @@ import {
   ErrorResponse,
   JsonRpcResult,
   JsonRpcError,
-} from "@walletconnect/jsonrpc-types";
+} from "@exodus/walletconnect-jsonrpc-types";
 import { ISignClient } from "./client";
 import { RelayerTypes } from "../core/relayer";
 import { SessionTypes } from "./session";

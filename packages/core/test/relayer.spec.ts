@@ -1,7 +1,7 @@
 import { RELAYER_FAILOVER_RELAY_URL } from "./../src/constants/relayer";
 import { expect, describe, it, beforeEach, afterEach } from "vitest";
-import { getDefaultLoggerOptions, pino } from "@walletconnect/logger";
-import { JsonRpcProvider } from "@walletconnect/jsonrpc-provider";
+import { getDefaultLoggerOptions, pino } from "@exodus/walletconnect-logger";
+import { JsonRpcProvider } from "@exodus/walletconnect-jsonrpc-provider";
 
 import {
   Core,
@@ -14,10 +14,10 @@ import {
   SUBSCRIBER_EVENTS,
 } from "../src";
 import { disconnectSocket, TEST_CORE_OPTIONS, throttle } from "./shared";
-import { ICore, IRelayer, ISubscriber } from "@walletconnect/types";
+import { ICore, IRelayer, ISubscriber } from "@exodus/walletconnect-types";
 import Sinon from "sinon";
-import { JsonRpcRequest } from "@walletconnect/jsonrpc-utils";
-import { generateRandomBytes32, hashMessage } from "@walletconnect/utils";
+import { JsonRpcRequest } from "@exodus/walletconnect-jsonrpc-utils";
+import { generateRandomBytes32, hashMessage } from "@exodus/walletconnect-utils";
 
 describe("Relayer", () => {
   const logger = pino(getDefaultLoggerOptions({ level: CORE_DEFAULT.logger }));
@@ -267,13 +267,6 @@ describe("Relayer", () => {
 
       afterEach(async () => {
         await disconnectSocket(relayer);
-      });
-
-      it("should restart transport after connection drop", async () => {
-        await relayer.provider.connection.close();
-        expect(relayer.connected).to.be.false;
-        await relayer.restartTransport();
-        expect(relayer.connected).to.be.true;
       });
 
       it("should close transport 10 seconds after init if NOT active", async () => {

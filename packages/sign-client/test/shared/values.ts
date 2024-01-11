@@ -1,4 +1,4 @@
-import { SignClientTypes, RelayerTypes } from "@walletconnect/types";
+import { SignClientTypes, RelayerTypes } from "@exodus/walletconnect-types";
 
 export const PACKAGE_NAME = "sign-client";
 

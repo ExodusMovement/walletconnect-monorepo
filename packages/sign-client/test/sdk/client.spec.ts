@@ -1,11 +1,11 @@
-import { RELAYER_EVENTS } from "@walletconnect/core";
+import { RELAYER_EVENTS } from "@exodus/walletconnect-core";
 import {
   formatJsonRpcError,
   formatJsonRpcResult,
   JsonRpcError,
-} from "@walletconnect/jsonrpc-utils";
-import { RelayerTypes } from "@walletconnect/types";
-import { getSdkError, parseUri } from "@walletconnect/utils";
+} from "@exodus/walletconnect-jsonrpc-utils";
+import { RelayerTypes } from "@exodus/walletconnect-types";
+import { getSdkError, parseUri } from "@exodus/walletconnect-utils";
 import { expect, describe, it, vi } from "vitest";
 import SignClient, { WALLETCONNECT_DEEPLINK_CHOICE } from "../../src";
 

@@ -1,6 +1,6 @@
-import { Store } from "@walletconnect/core";
-import { Logger } from "@walletconnect/logger";
-import { ICore, PendingRequestTypes } from "@walletconnect/types";
+import { Store } from "@exodus/walletconnect-core";
+import { Logger } from "@exodus/walletconnect-logger";
+import { ICore, PendingRequestTypes } from "@exodus/walletconnect-types";
 import { REQUEST_CONTEXT, SIGN_CLIENT_STORAGE_PREFIX } from "../constants";
 
 export class PendingRequest extends Store<number, PendingRequestTypes.Struct> {

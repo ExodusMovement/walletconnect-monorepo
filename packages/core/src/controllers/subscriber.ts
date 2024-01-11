@@ -1,16 +1,16 @@
 import { EventEmitter } from "events";
-import { HEARTBEAT_EVENTS } from "@walletconnect/heartbeat";
-import { ErrorResponse, RequestArguments } from "@walletconnect/jsonrpc-types";
-import { generateChildLogger, getLoggerContext, Logger } from "@walletconnect/logger";
-import { RelayJsonRpc } from "@walletconnect/relay-api";
-import { Watch } from "@walletconnect/time";
+import { HEARTBEAT_EVENTS } from "@exodus/walletconnect-heartbeat";
+import { ErrorResponse, RequestArguments } from "@exodus/walletconnect-jsonrpc-types";
+import { generateChildLogger, getLoggerContext, Logger } from "@exodus/walletconnect-logger";
+import { RelayJsonRpc } from "@exodus/walletconnect-relay-api";
+import { Watch } from "@exodus/walletconnect-time";
 import {
   IRelayer,
   ISubscriber,
   RelayerTypes,
   SubscriberEvents,
   SubscriberTypes,
-} from "@walletconnect/types";
+} from "@exodus/walletconnect-types";
 import {
   getSdkError,
   getInternalError,
@@ -19,7 +19,7 @@ import {
   createExpiringPromise,
   hashMessage,
   isValidArray,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import {
   CORE_STORAGE_PREFIX,
   SUBSCRIBER_CONTEXT,

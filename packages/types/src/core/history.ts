@@ -1,11 +1,11 @@
-import { IEvents } from "@walletconnect/events";
+import { IEvents } from "@exodus/walletconnect-events";
 import {
   ErrorResponse,
   JsonRpcRequest,
   JsonRpcResponse,
   RequestArguments,
-} from "@walletconnect/jsonrpc-types";
-import { Logger } from "@walletconnect/logger";
+} from "@exodus/walletconnect-jsonrpc-types";
+import { Logger } from "@exodus/walletconnect-logger";
 
 import { ICore } from "./core";
 

@@ -1,19 +1,19 @@
-import { HEARTBEAT_EVENTS } from "@walletconnect/heartbeat";
-import { JsonRpcPayload, RequestArguments } from "@walletconnect/jsonrpc-types";
-import { generateChildLogger, getLoggerContext, Logger } from "@walletconnect/logger";
-import { RelayJsonRpc } from "@walletconnect/relay-api";
-import { IPublisher, IRelayer, PublisherTypes, RelayerTypes } from "@walletconnect/types";
+import { HEARTBEAT_EVENTS } from "@exodus/walletconnect-heartbeat";
+import { JsonRpcPayload, RequestArguments } from "@exodus/walletconnect-jsonrpc-types";
+import { generateChildLogger, getLoggerContext, Logger } from "@exodus/walletconnect-logger";
+import { RelayJsonRpc } from "@exodus/walletconnect-relay-api";
+import { IPublisher, IRelayer, PublisherTypes, RelayerTypes } from "@exodus/walletconnect-types";
 import {
   getRelayProtocolApi,
   getRelayProtocolName,
   isUndefined,
   createExpiringPromise,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { EventEmitter } from "events";
 
 import { PUBLISHER_CONTEXT, PUBLISHER_DEFAULT_TTL, RELAYER_EVENTS } from "../constants";
-import { getBigIntRpcId } from "@walletconnect/jsonrpc-utils";
-import { TEN_SECONDS, toMiliseconds } from "@walletconnect/time";
+import { getBigIntRpcId } from "@exodus/walletconnect-jsonrpc-utils";
+import { TEN_SECONDS, toMiliseconds } from "@exodus/walletconnect-time";
 
 export class Publisher extends IPublisher {
   public events = new EventEmitter();

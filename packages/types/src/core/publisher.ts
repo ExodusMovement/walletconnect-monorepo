@@ -1,5 +1,5 @@
-import { IEvents } from "@walletconnect/events";
-import { Logger } from "@walletconnect/logger";
+import { IEvents } from "@exodus/walletconnect-events";
+import { Logger } from "@exodus/walletconnect-logger";
 
 import { IRelayer, RelayerTypes } from "./relayer";
 

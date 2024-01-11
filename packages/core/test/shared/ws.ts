@@ -1,4 +1,4 @@
-import { IRelayer } from "@walletconnect/types";
+import { IRelayer } from "@exodus/walletconnect-types";
 
 export async function disconnectSocket(relayer: IRelayer) {
   if (relayer && relayer.connected) {

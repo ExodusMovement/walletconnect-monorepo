@@ -1,12 +1,12 @@
-import { AuthEngineTypes, IAuthClient } from "@walletconnect/auth-client";
-import { ErrorResponse, JsonRpcResponse } from "@walletconnect/jsonrpc-utils";
+import { AuthEngineTypes, IAuthClient } from "@exodus/walletconnect-auth-client";
+import { ErrorResponse, JsonRpcResponse } from "@exodus/walletconnect-jsonrpc-utils";
 import {
   ISignClient,
   PendingRequestTypes,
   ProposalTypes,
   SessionTypes,
   EchoClientTypes,
-} from "@walletconnect/types";
+} from "@exodus/walletconnect-types";
 import { IWeb3Wallet } from "./client";
 
 export abstract class IWeb3WalletEngine {

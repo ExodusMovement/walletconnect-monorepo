@@ -1,12 +1,12 @@
-import { Core, RELAYER_EVENTS } from "@walletconnect/core";
+import { Core, RELAYER_EVENTS } from "@exodus/walletconnect-core";
 import {
   JsonRpcPayload,
   formatJsonRpcResult,
   isJsonRpcRequest,
-} from "@walletconnect/jsonrpc-utils";
-import { SignClient } from "@walletconnect/sign-client";
-import { CoreTypes, ICore, ISignClient, SessionTypes } from "@walletconnect/types";
-import { getSdkError } from "@walletconnect/utils";
+} from "@exodus/walletconnect-jsonrpc-utils";
+import { SignClient } from "@exodus/walletconnect-sign-client";
+import { CoreTypes, ICore, ISignClient, SessionTypes } from "@exodus/walletconnect-types";
+import { getSdkError } from "@exodus/walletconnect-utils";
 import { Wallet as CryptoWallet } from "@ethersproject/wallet";
 
 import { expect, describe, it, beforeEach, vi, beforeAll, afterAll } from "vitest";

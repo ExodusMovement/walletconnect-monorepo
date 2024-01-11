@@ -1,6 +1,6 @@
-import { IEvents } from "@walletconnect/events";
-import { IHeartBeat } from "@walletconnect/heartbeat";
-import { IKeyValueStorage, KeyValueStorageOptions } from "@walletconnect/keyvaluestorage";
+import { IEvents } from "@exodus/walletconnect-events";
+import { IHeartBeat } from "@exodus/walletconnect-heartbeat";
+import { IKeyValueStorage, KeyValueStorageOptions } from "@exodus/walletconnect-keyvaluestorage";
 
 import { ICrypto } from "./crypto";
 import { IRelayer } from "./relayer";
@@ -8,7 +8,7 @@ import { IKeyChain } from "./keychain";
 import { IJsonRpcHistory } from "./history";
 import { IExpirer } from "./expirer";
 import { IPairing } from "./pairing";
-import { Logger } from "@walletconnect/logger";
+import { Logger } from "@exodus/walletconnect-logger";
 import { IVerify } from "./verify";
 import { IEchoClient } from "./echo";
 export declare namespace CoreTypes {

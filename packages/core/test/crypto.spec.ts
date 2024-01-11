@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach } from "vitest";
-import { getDefaultLoggerOptions, pino } from "@walletconnect/logger";
-import * as utils from "@walletconnect/utils";
+import { getDefaultLoggerOptions, pino } from "@exodus/walletconnect-logger";
+import * as utils from "@exodus/walletconnect-utils";
 import Sinon from "sinon";
 import { Core, CORE_DEFAULT, Crypto } from "../src";
 import { TEST_CORE_OPTIONS } from "./shared";
@@ -39,7 +39,7 @@ describe("Crypto", () => {
       crypto.keychain.set = keychainSpy;
       const returnedPublicKey = await crypto.generateKeyPair();
       const [calledPublicKey, calledPrivateKey] = keychainSpy.getCall(0).args;
-      expect(calledPublicKey).to.equal(publicKey);
+      expect(calledPublicKey).to.equal(`pk-${publicKey}`);
       expect(calledPrivateKey).to.equal(privateKey);
       expect(returnedPublicKey).to.equal(publicKey);
     });
@@ -51,17 +51,16 @@ describe("Crypto", () => {
       expect(() => invalidCrypto.generateSharedKey("a", "b")).to.throw("Not initialized. crypto");
     });
     it("generates a shared symKey, sets it in the keychain and returns the topic", async () => {
-      const overrideTopic = utils.generateRandomBytes32();
       const peerPublicKey = utils.generateRandomBytes32();
       const selfPublicKey = await crypto.generateKeyPair();
-      const selfPrivateKey = crypto.keychain.get(selfPublicKey);
+      const selfPrivateKey = crypto.keychain.get(`pk-${selfPublicKey}`);
       const expectedSymKey = utils.deriveSymKey(selfPrivateKey, peerPublicKey);
       const spy = Sinon.spy();
       crypto.setSymKey = spy;
-      await crypto.generateSharedKey(selfPublicKey, peerPublicKey, overrideTopic);
+      await crypto.generateSharedKey(selfPublicKey, peerPublicKey);
       const [calledSymKey, calledOverrideTopic] = spy.getCall(0).args;
-      expect(calledSymKey).to.equal(expectedSymKey);
-      expect(calledOverrideTopic).to.equal(overrideTopic);
+      expect(calledSymKey).to.equal(`${expectedSymKey}`);
+      expect(calledOverrideTopic).to.equal(undefined);
     });
   });
 
@@ -77,7 +76,7 @@ describe("Crypto", () => {
       const topic = utils.hashKey(fakeSymKey);
       const returnedTopic = await crypto.setSymKey(fakeSymKey);
       const [calledTopic, calledSymKey] = spy.getCall(0).args;
-      expect(calledTopic).to.equal(topic);
+      expect(calledTopic).to.equal(`sym-${topic}`);
       expect(calledSymKey).to.equal(fakeSymKey);
       expect(returnedTopic).to.equal(topic);
     });
@@ -86,11 +85,11 @@ describe("Crypto", () => {
       crypto.keychain.set = spy;
       const fakeSymKey = utils.generateRandomBytes32();
       const topic = utils.generateRandomBytes32();
-      const returnedTopic = await crypto.setSymKey(fakeSymKey, topic);
+      const returnedTopic = await crypto.setSymKey(fakeSymKey);
       const [calledTopic, calledSymKey] = spy.getCall(0).args;
-      expect(calledTopic).to.equal(topic);
+      expect(calledTopic).to.equal(`sym-${utils.hashKey(fakeSymKey)}`);
       expect(calledSymKey).to.equal(fakeSymKey);
-      expect(returnedTopic).to.equal(topic);
+      expect(returnedTopic).to.equal(utils.hashKey(fakeSymKey));
     });
   });
 
@@ -105,7 +104,7 @@ describe("Crypto", () => {
       crypto.keychain.del = spy;
       await crypto.deleteKeyPair(publicKey);
       const [calledTopic] = spy.getCall(0).args;
-      expect(calledTopic).to.equal(publicKey);
+      expect(calledTopic).to.equal(`pk-${publicKey}`);
     });
   });
 
@@ -120,7 +119,7 @@ describe("Crypto", () => {
       crypto.keychain.del = spy;
       await crypto.deleteSymKey(topic);
       const [calledTopic] = spy.getCall(0).args;
-      expect(calledTopic).to.equal(topic);
+      expect(calledTopic).to.equal(`sym-${topic}`);
     });
   });
 

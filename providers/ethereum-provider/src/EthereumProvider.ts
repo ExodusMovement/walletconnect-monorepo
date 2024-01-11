@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
-import { getAccountsFromNamespaces, getSdkError, isValidArray } from "@walletconnect/utils";
-import { KeyValueStorageOptions } from "@walletconnect/keyvaluestorage";
+import { getAccountsFromNamespaces, getSdkError, isValidArray } from "@exodus/walletconnect-utils";
+import { KeyValueStorageOptions } from "@exodus/walletconnect-keyvaluestorage";
 import {
   IEthereumProvider as IProvider,
   IEthereumProviderEvents,
@@ -9,8 +9,8 @@ import {
   QrModalOptions,
 } from "./types";
 import { Metadata, Namespace, UniversalProvider } from "@walletconnect/universal-provider";
-import { SessionTypes, SignClientTypes } from "@walletconnect/types";
-import { JsonRpcResult } from "@walletconnect/jsonrpc-types";
+import { SessionTypes, SignClientTypes } from "@exodus/walletconnect-types";
+import { JsonRpcResult } from "@exodus/walletconnect-jsonrpc-types";
 import {
   STORAGE_KEY,
   REQUIRED_METHODS,

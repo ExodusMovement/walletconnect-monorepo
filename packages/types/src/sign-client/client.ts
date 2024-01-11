@@ -1,4 +1,4 @@
-import { Logger } from "@walletconnect/logger";
+import { Logger } from "@exodus/walletconnect-logger";
 import EventEmmiter from "events";
 import { CoreTypes, ICore } from "../core/core";
 import { IEngine } from "./engine";

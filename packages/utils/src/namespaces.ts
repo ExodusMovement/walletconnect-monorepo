@@ -1,4 +1,4 @@
-import { ProposalTypes, SessionTypes } from "@walletconnect/types";
+import { ProposalTypes, SessionTypes } from "@exodus/walletconnect-types";
 import { mergeArrays } from "./misc";
 import { isConformingNamespaces, isValidNamespaces, isValidObject } from "./validators";
 

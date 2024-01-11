@@ -1,11 +1,11 @@
-import { generateChildLogger, getLoggerContext, Logger } from "@walletconnect/logger";
-import { ICore, IStore } from "@walletconnect/types";
+import { generateChildLogger, getLoggerContext, Logger } from "@exodus/walletconnect-logger";
+import { ICore, IStore } from "@exodus/walletconnect-types";
 import {
   getInternalError,
   isProposalStruct,
   isSessionStruct,
   isUndefined,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { CORE_STORAGE_PREFIX, STORE_STORAGE_VERSION } from "../constants";
 import isEqual from "lodash.isequal";
 

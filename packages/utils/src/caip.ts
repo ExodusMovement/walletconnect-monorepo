@@ -1,4 +1,4 @@
-import { SessionTypes, ProposalTypes } from "@walletconnect/types";
+import { SessionTypes, ProposalTypes } from "@exodus/walletconnect-types";
 
 interface ChainIdParams {
   namespace: string;

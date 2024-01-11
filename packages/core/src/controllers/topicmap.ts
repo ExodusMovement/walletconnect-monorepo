@@ -1,4 +1,4 @@
-import { ISubscriberTopicMap } from "@walletconnect/types";
+import { ISubscriberTopicMap } from "@exodus/walletconnect-types";
 
 export class SubscriberTopicMap implements ISubscriberTopicMap {
   public map = new Map<string, string[]>();

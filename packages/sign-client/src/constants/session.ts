@@ -1,4 +1,4 @@
-import { SEVEN_DAYS } from "@walletconnect/time";
+import { SEVEN_DAYS } from "@exodus/walletconnect-time";
 
 export const SESSION_CONTEXT = "session";
 

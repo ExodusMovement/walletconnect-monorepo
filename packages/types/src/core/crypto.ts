@@ -1,5 +1,5 @@
-import { JsonRpcPayload } from "@walletconnect/jsonrpc-types";
-import { Logger } from "@walletconnect/logger";
+import { JsonRpcPayload } from "@exodus/walletconnect-jsonrpc-types";
+import { Logger } from "@exodus/walletconnect-logger";
 import { ICore } from "./core";
 import { IKeyChain } from "./keychain";
 

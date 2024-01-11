@@ -1,4 +1,4 @@
-import { THIRTY_DAYS, FIVE_SECONDS } from "@walletconnect/time";
+import { THIRTY_DAYS, FIVE_SECONDS } from "@exodus/walletconnect-time";
 
 export const SUBSCRIBER_EVENTS = {
   created: "subscription_created",

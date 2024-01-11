@@ -1,4 +1,4 @@
-import { RelayerTypes } from "@walletconnect/types";
+import { RelayerTypes } from "@exodus/walletconnect-types";
 import { utils } from "ethers";
 
 export const CHAIN_ID = 123;

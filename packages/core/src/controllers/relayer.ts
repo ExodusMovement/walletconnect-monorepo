@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { JsonRpcProvider } from "@walletconnect/jsonrpc-provider";
+import { JsonRpcProvider } from "@exodus/walletconnect-jsonrpc-provider";
 import {
   formatJsonRpcResult,
   IJsonRpcProvider,
@@ -8,17 +8,17 @@ import {
   JsonRpcPayload,
   JsonRpcRequest,
   RequestArguments,
-} from "@walletconnect/jsonrpc-utils";
-import WsConnection from "@walletconnect/jsonrpc-ws-connection";
+} from "@exodus/walletconnect-jsonrpc-utils";
+import WsConnection from "@exodus/walletconnect-jsonrpc-ws-connection";
 import {
   generateChildLogger,
   getDefaultLoggerOptions,
   getLoggerContext,
   pino,
   Logger,
-} from "@walletconnect/logger";
-import { RelayJsonRpc } from "@walletconnect/relay-api";
-import { toMiliseconds } from "@walletconnect/time";
+} from "@exodus/walletconnect-logger";
+import { RelayJsonRpc } from "@exodus/walletconnect-relay-api";
+import { toMiliseconds } from "@exodus/walletconnect-time";
 import {
   ICore,
   IMessageTracker,
@@ -28,7 +28,7 @@ import {
   RelayerOptions,
   RelayerTypes,
   SubscriberTypes,
-} from "@walletconnect/types";
+} from "@exodus/walletconnect-types";
 import {
   createExpiringPromise,
   formatRelayRpcUrl,
@@ -36,7 +36,7 @@ import {
   isOnline,
   subscribeToNetworkChange,
   getBundleId,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 
 import {
   RELAYER_SDK_VERSION,

@@ -1,4 +1,4 @@
-import { SignClient } from "@walletconnect/sign-client/dist/types/client";
+import { SignClient } from "@exodus/walletconnect-sign-client/dist/types/client";
 import UniversalProvider from "../../src";
 import { disconnectSocket } from "./index";
 

@@ -1,11 +1,11 @@
-import { SessionTypes } from "@walletconnect/types";
+import { SessionTypes } from "@exodus/walletconnect-types";
 import {
   isCaipNamespace,
   isValidObject,
   mergeArrays,
   parseChainId,
   parseNamespaceKey,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import { RPC_URL } from "../constants";
 import { Namespace, NamespaceConfig } from "../types";
 import { merge } from "lodash";

@@ -1,10 +1,10 @@
+/* eslint-disable no-console */
 import {
   EXPIRER_EVENTS,
   PAIRING_EVENTS,
   RELAYER_DEFAULT_PROTOCOL,
   RELAYER_EVENTS,
-  VERIFY_SERVER,
-} from "@walletconnect/core";
+} from "@exodus/walletconnect-core";
 
 import {
   formatJsonRpcError,
@@ -16,8 +16,8 @@ import {
   isJsonRpcResponse,
   isJsonRpcResult,
   JsonRpcRequest,
-} from "@walletconnect/jsonrpc-utils";
-import { FIVE_MINUTES, ONE_SECOND, toMiliseconds } from "@walletconnect/time";
+} from "@exodus/walletconnect-jsonrpc-utils";
+import { FIVE_MINUTES, ONE_SECOND, toMiliseconds } from "@exodus/walletconnect-time";
 import {
   EnginePrivate,
   EngineTypes,
@@ -32,7 +32,7 @@ import {
   RelayerTypes,
   SessionTypes,
   PairingTypes,
-} from "@walletconnect/types";
+} from "@exodus/walletconnect-types";
 import {
   calcExpiry,
   createDelayedPromise,
@@ -59,7 +59,6 @@ import {
   isValidRequest,
   isValidRequestExpiry,
   hashMessage,
-  isBrowser,
   isValidRequiredNamespaces,
   isValidResponse,
   isValidString,
@@ -68,7 +67,7 @@ import {
   handleDeeplinkRedirect,
   MemoryStore,
   getDeepLink,
-} from "@walletconnect/utils";
+} from "@exodus/walletconnect-utils";
 import EventEmmiter from "events";
 import {
   ENGINE_CONTEXT,
@@ -76,7 +75,6 @@ import {
   PROPOSAL_EXPIRY_MESSAGE,
   SESSION_EXPIRY,
   SESSION_REQUEST_EXPIRY_BOUNDARIES,
-  METHODS_TO_VERIFY,
   WALLETCONNECT_DEEPLINK_CHOICE,
   ENGINE_QUEUE_STATES,
 } from "../constants";
@@ -549,10 +547,6 @@ export class Engine extends IEngine {
   private sendRequest: EnginePrivate["sendRequest"] = async (args) => {
     const { topic, method, params, expiry, relayRpcId, clientRpcId, throwOnFailedPublish } = args;
     const payload = formatJsonRpcRequest(method, params, clientRpcId);
-    if (isBrowser() && METHODS_TO_VERIFY.includes(method)) {
-      const hash = hashMessage(JSON.stringify(payload));
-      this.client.core.verify.register({ attestationId: hash });
-    }
     const message = await this.client.core.crypto.encode(topic, payload);
     const opts = ENGINE_RPC_OPTS[method].req;
     if (expiry) opts.ttl = expiry;
@@ -1455,31 +1449,15 @@ export class Engine extends IEngine {
     await this.isValidSessionOrPairingTopic(topic);
   };
 
-  private getVerifyContext = async (hash: string, metadata: CoreTypes.Metadata) => {
+  private getVerifyContext = async (_hash: string, metadata: CoreTypes.Metadata) => {
     const context: Verify.Context = {
       verified: {
-        verifyUrl: metadata.verifyUrl || VERIFY_SERVER,
+        verifyUrl: metadata.verifyUrl || "",
         validation: "UNKNOWN",
         origin: metadata.url || "",
       },
     };
 
-    try {
-      const result = await this.client.core.verify.resolve({
-        attestationId: hash,
-        verifyUrl: metadata.verifyUrl,
-      });
-      if (result) {
-        context.verified.origin = result.origin;
-        context.verified.isScam = result.isScam;
-        context.verified.validation =
-          result.origin === new URL(metadata.url).origin ? "VALID" : "INVALID";
-      }
-    } catch (e) {
-      this.client.logger.info(e);
-    }
-
-    this.client.logger.info(`Verify context: ${JSON.stringify(context)}`);
     return context;
   };
 

@@ -1,4 +1,4 @@
-import { CoreTypes } from "@walletconnect/types";
+import { CoreTypes } from "@exodus/walletconnect-types";
 
 export const TEST_RELAY_URL = process.env.TEST_RELAY_URL
   ? process.env.TEST_RELAY_URL

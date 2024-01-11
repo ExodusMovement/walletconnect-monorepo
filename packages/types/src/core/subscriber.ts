@@ -1,6 +1,6 @@
-import { IEvents } from "@walletconnect/events";
-import { ErrorResponse } from "@walletconnect/jsonrpc-types";
-import { Logger } from "@walletconnect/logger";
+import { IEvents } from "@exodus/walletconnect-events";
+import { ErrorResponse } from "@exodus/walletconnect-jsonrpc-types";
+import { Logger } from "@exodus/walletconnect-logger";
 
 import { IRelayer, RelayerTypes } from "./relayer";
 

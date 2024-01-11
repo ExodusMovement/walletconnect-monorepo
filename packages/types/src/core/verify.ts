@@ -1,4 +1,4 @@
-import { Logger } from "@walletconnect/logger";
+import { Logger } from "@exodus/walletconnect-logger";
 
 export declare namespace Verify {
   export interface Context {
@@ -20,8 +20,5 @@ export abstract class IVerify {
 
   public abstract register(params: { attestationId: string }): Promise<void>;
 
-  public abstract resolve(params: {
-    attestationId: string;
-    verifyUrl?: string;
-  }): Promise<{ origin: string; isScam?: boolean }>;
+  public abstract resolve(params: { attestationId: string; verifyUrl?: string }): Promise<any>;
 }

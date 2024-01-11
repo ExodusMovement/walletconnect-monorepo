@@ -1,15 +1,14 @@
-import { detect } from "detect-browser";
-import { FIVE_MINUTES, fromMiliseconds, toMiliseconds } from "@walletconnect/time";
+import { FIVE_MINUTES, fromMiliseconds, toMiliseconds } from "@exodus/walletconnect-time";
 import {
   SignClientTypes,
   RelayerClientMetadata,
   EngineTypes,
   RelayerTypes,
-} from "@walletconnect/types";
-import { getDocument, getLocation, getNavigator } from "@walletconnect/window-getters";
-import { getWindowMetadata } from "@walletconnect/window-metadata";
-import { ErrorResponse } from "@walletconnect/jsonrpc-utils";
-import { IKeyValueStorage } from "@walletconnect/keyvaluestorage";
+} from "@exodus/walletconnect-types";
+import { getDocument, getLocation, getNavigator } from "@exodus/walletconnect-window-getters";
+import { getWindowMetadata } from "@exodus/walletconnect-window-metadata";
+import { ErrorResponse } from "@exodus/walletconnect-jsonrpc-utils";
+import { IKeyValueStorage } from "@exodus/walletconnect-keyvaluestorage";
 import * as qs from "query-string";
 
 // -- constants -----------------------------------------//
@@ -112,24 +111,7 @@ export function getRelayClientMetadata(protocol: string, version: number): Relay
 // -- rpcUrl ----------------------------------------------//
 
 export function getJavascriptOS() {
-  const env = getEnvironment();
-  // global.Platform is set by react-native-compat
-  if (
-    env === ENV_MAP.reactNative &&
-    typeof global !== "undefined" &&
-    typeof (global as any)?.Platform !== "undefined"
-  ) {
-    const { OS, Version } = (global as any).Platform;
-    return [OS, Version].join("-");
-  }
-
-  const info = detect();
-  if (info === null) return "unknown";
-  const os = info.os ? info.os.replace(" ", "").toLowerCase() : "unknown";
-  if (info.type === "browser") {
-    return [os, info.name, info.version].join("-");
-  }
-  return [os, info.version].join("-");
+  return "unknown";
 }
 
 export function getJavascriptID() {
@@ -171,8 +153,17 @@ export function getHttpUrl(url: string) {
   // regex from https://stackoverflow.com/questions/3883871/regexp-to-grab-protocol-from-url
   const matches = url.match(/^[^:]+(?=:\/\/)/gi) || [];
   let protocol = matches[0];
-  const domain = typeof protocol !== "undefined" ? url.split("://")[1] : url;
+  if (!protocol) {
+    throw new Error(`unknown protocol for URL ${url}`);
+  }
+  if (url.split("://").length !== 2) {
+    throw new Error(`invalid :// count for ${url}`);
+  }
+  const domain = url.split("://")[1];
   protocol = protocol === "wss" ? "https" : "http";
+  if (protocol !== "https") {
+    throw new Error(`expected output protocol to be https`);
+  }
   return [protocol, domain].join("://");
 }
 
@@ -219,7 +210,7 @@ export function mapEntries<A = any, B = any>(
   obj: Record<string, A>,
   cb: (x: A) => B,
 ): Record<string, B> {
-  const res = {};
+  const res = Object.create(null);
   Object.keys(obj).forEach((key) => {
     res[key] = cb(obj[key]);
   });

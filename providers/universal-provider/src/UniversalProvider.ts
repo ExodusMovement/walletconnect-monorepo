@@ -1,5 +1,6 @@
 import SignClient, { PROPOSAL_EXPIRY_MESSAGE } from "@exodus/walletconnect-sign-client";
 import { SessionTypes } from "@exodus/walletconnect-types";
+import { JsonRpcResult } from "@exodus/walletconnect-jsonrpc-types";
 import { getSdkError, isValidArray, parseNamespaceKey } from "@exodus/walletconnect-utils";
 import { getDefaultLoggerOptions, Logger, pino } from "@exodus/walletconnect-logger";
 import {

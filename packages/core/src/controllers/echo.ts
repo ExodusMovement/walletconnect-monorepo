@@ -1,5 +1,5 @@
-import { generateChildLogger, Logger } from "@walletconnect/logger";
-import { IEchoClient } from "@walletconnect/types";
+import { generateChildLogger, Logger } from "@exodus/walletconnect-logger";
+import { IEchoClient } from "@exodus/walletconnect-types";
 import { ECHO_CONTEXT, ECHO_URL } from "../constants";
 import fetch from "isomorphic-unfetch";
 

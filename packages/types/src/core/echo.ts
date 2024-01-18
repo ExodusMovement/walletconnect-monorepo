@@ -1,4 +1,4 @@
-import { Logger } from "@walletconnect/logger";
+import { Logger } from "@exodus/walletconnect-logger";
 
 export declare namespace EchoClientTypes {
   type RegisterDeviceTokenParams = {

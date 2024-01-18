@@ -511,7 +511,7 @@ export class EthereumProvider implements IEthereumProvider {
     if (this.rpc.showQrModal) {
       let WalletConnectModalClass;
       try {
-        const { WalletConnectModal } = await import("@walletconnect/modal");
+        const WalletConnectModal = require("@walletconnect/modal").WalletConnectModal;
         WalletConnectModalClass = WalletConnectModal;
       } catch {
         throw new Error("To use QR modal, please install @walletconnect/modal package");

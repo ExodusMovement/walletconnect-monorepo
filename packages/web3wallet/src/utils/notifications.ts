@@ -1,6 +1,6 @@
-import { Core } from "@walletconnect/core";
+import { Core } from "@exodus/walletconnect-core";
 import { Web3WalletTypes } from "../types";
-import { SessionStore } from "@walletconnect/sign-client";
+import { SessionStore } from "@exodus/walletconnect-sign-client";
 
 export const Notifications: Web3WalletTypes.INotifications = {
   decryptMessage: async (params) => {

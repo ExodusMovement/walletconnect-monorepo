@@ -32,8 +32,7 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "target": "es2018"
+    "suppressImplicitAnyIndexErrors": true
   },
   "include": ["**/package.json", "packages", "providers"]
 }

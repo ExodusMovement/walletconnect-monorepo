@@ -134,7 +134,7 @@ export class Pairing implements IPairing {
 
     // avoid overwriting keychain pairing already exists
     if (!this.core.crypto.keychain.has(topic)) {
-      await this.core.crypto.setSymKey(symKey, topic);
+      await this.core.crypto.setSymKey(symKey);
       await this.core.relayer.subscribe(topic, { relay });
     }
 

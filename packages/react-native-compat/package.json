@@ -42,7 +42,7 @@
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "*",
-    "@react-native-community/netinfo": "*",
+    "@exodus/netinfo": "*",
     "expo-application": "*",
     "react-native-get-random-values": "*"
   },

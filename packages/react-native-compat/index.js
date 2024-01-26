@@ -34,10 +34,10 @@ if (typeof global?.Platform === "undefined") {
 
 if (typeof global?.NetInfo === "undefined") {
   try {
-    global.NetInfo = require("@react-native-community/netinfo");
+    global.NetInfo = require("@exodus/netinfo");
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error("react-native-compat: @react-native-community/netinfo is not available");
+    console.error("react-native-compat: @exodus/netinfo is not available");
   }
 }
 

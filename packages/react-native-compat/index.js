@@ -54,6 +54,6 @@ if (typeof global?.Application === "undefined") {
     }
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error("react-native-compat: Application module is not available");
+    console.warn("react-native-compat: Application module is not available");
   }
 }

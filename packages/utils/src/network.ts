@@ -26,7 +26,8 @@ export function getBrowserOnlineStatus() {
 export async function getReactNativeOnlineStatus(): Promise<boolean> {
   // global.NetInfo is set in react-native-compat
   if (isReactNative() && typeof global !== "undefined" && (global as any)?.NetInfo) {
-    const state = await (global as any)?.NetInfo.isConnected.fetch();
+    return true; // TODO: discuss on adding react-native-community/netinfo
+    const state = await (global as any)?.NetInfo.fetch();
     return state?.isConnected;
   }
   // fallback to true if global.NetInfo is undefined, meaning an older version of react-native-compat is used

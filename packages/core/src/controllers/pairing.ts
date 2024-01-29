@@ -24,6 +24,7 @@ import {
   isExpired,
   parseExpirerTarget,
   TYPE_1,
+  hashKey,
 } from "@exodus/walletconnect-utils";
 import {
   formatJsonRpcRequest,

@@ -397,6 +397,10 @@ export class Pairing implements IPairing {
       const { message } = getInternalError("MISSING_OR_INVALID", `pair() uri#symKey`);
       throw new Error(message);
     }
+    if (uri?.topic !== hashKey(uri.symKey)) {
+      const { message } = getInternalError("MISSING_OR_INVALID", `pair() uri#topic`);
+      throw new Error(message);
+    }
   };
 
   private isValidPing = async (params: { topic: string }) => {

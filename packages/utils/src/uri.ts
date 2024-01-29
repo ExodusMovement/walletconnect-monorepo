@@ -1,6 +1,5 @@
 import * as qs from "query-string";
 import { EngineTypes, RelayerTypes } from "@exodus/walletconnect-types";
-import { hashKey } from "./crypto";
 
 // -- uri -------------------------------------------------- //
 
@@ -36,9 +35,7 @@ export function parseUri(str: string): EngineTypes.UriParameters {
     symKey: queryParams.symKey as string,
     relay: parseRelayParams(queryParams),
   };
-  if (result.topic !== hashKey(result.symKey)) {
-    throw new Error("invalid value for topic");
-  }
+
   return result;
 }
 

@@ -24,6 +24,7 @@ import {
   isExpired,
   parseExpirerTarget,
   TYPE_1,
+  hashKey,
 } from "@exodus/walletconnect-utils";
 import {
   formatJsonRpcRequest,
@@ -121,12 +122,6 @@ export class Pairing implements IPairing {
       }
     }
 
-    // avoid overwriting keychain pairing already exists
-    if (!this.core.crypto.keychain.has(topic)) {
-      await this.core.crypto.setSymKey(symKey);
-      await this.core.relayer.subscribe(topic, { relay });
-    }
-
     const expiry = calcExpiry(FIVE_MINUTES);
     const pairing = { topic, relay, expiry, active: false };
     await this.pairings.set(topic, pairing);
@@ -137,6 +132,13 @@ export class Pairing implements IPairing {
     }
 
     this.events.emit(PAIRING_EVENTS.create, pairing);
+
+    // avoid overwriting keychain pairing already exists
+    if (!this.core.crypto.keychain.has(topic)) {
+      await this.core.crypto.setSymKey(symKey);
+      await this.core.relayer.subscribe(topic, { relay });
+    }
+
     return pairing;
   };
 
@@ -385,6 +387,19 @@ export class Pairing implements IPairing {
     }
     if (!isValidUrl(params.uri)) {
       const { message } = getInternalError("MISSING_OR_INVALID", `pair() uri: ${params.uri}`);
+      throw new Error(message);
+    }
+    const uri = parseUri(params.uri);
+    if (!uri?.relay?.protocol) {
+      const { message } = getInternalError("MISSING_OR_INVALID", `pair() uri#relay-protocol`);
+      throw new Error(message);
+    }
+    if (!uri?.symKey) {
+      const { message } = getInternalError("MISSING_OR_INVALID", `pair() uri#symKey`);
+      throw new Error(message);
+    }
+    if (uri?.topic !== hashKey(uri.symKey)) {
+      const { message } = getInternalError("MISSING_OR_INVALID", `pair() uri#topic`);
       throw new Error(message);
     }
   };

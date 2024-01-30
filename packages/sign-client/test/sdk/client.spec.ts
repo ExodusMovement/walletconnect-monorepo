@@ -6,7 +6,7 @@ import {
 } from "@exodus/walletconnect-jsonrpc-utils";
 import { RelayerTypes } from "@exodus/walletconnect-types";
 import { getSdkError, parseUri } from "@exodus/walletconnect-utils";
-import { expect, describe, it, vi, beforeEach, afterEach } from "vitest";
+import { expect, describe, it, vi } from "vitest";
 import SignClient, { WALLETCONNECT_DEEPLINK_CHOICE } from "../../src";
 
 import {
@@ -223,6 +223,8 @@ describe("Sign Client Integration", () => {
         await clients.A.core.storage.setItem(WALLETCONNECT_DEEPLINK_CHOICE, deepLink);
         expect(await clients.A.core.storage.getItem(WALLETCONNECT_DEEPLINK_CHOICE)).to.eq(deepLink);
         await clients.A.disconnect({ topic, reason: getSdkError("USER_DISCONNECTED") });
+        // small delay to finish disconnect
+        await throttle(500);
         expect(await clients.A.core.storage.getItem(WALLETCONNECT_DEEPLINK_CHOICE)).to.be.undefined;
         await deleteClients(clients);
       });
@@ -337,6 +339,88 @@ describe("Sign Client Integration", () => {
             Array.from(Array(expectedRequests).keys()).map(() =>
               clients.A.request({
                 topic,
+                ...TEST_REQUEST_PARAMS,
+              }),
+            ),
+          ]);
+          await throttle(1000);
+          await deleteClients(clients);
+        });
+        /**
+         * this test simulates the case where a session is disconnected
+         * while session request is being approved
+         * the queue should continue operating normally after the `respond` rejection
+         */
+        it("continue processing requests queue after respond rejection due to disconnected session", async () => {
+          // create the clients and pair them
+          const {
+            clients,
+            sessionA: { topic: topicA },
+          } = await initTwoPairedClients({}, {}, { logger: "error" });
+          const dapp = clients.A as SignClient;
+          const wallet = clients.B as SignClient;
+          const { uri, approval } = await dapp.connect({
+            requiredNamespaces: {},
+          });
+
+          let topicB = "";
+          await Promise.all([
+            new Promise<void>((resolve) => {
+              wallet.once("session_proposal", async (args) => {
+                const { id } = args.params;
+                await wallet.approve({
+                  id,
+                  namespaces: TEST_NAMESPACES,
+                });
+                resolve();
+              });
+            }),
+            wallet.pair({ uri: uri! }),
+            new Promise<void>(async (resolve) => {
+              const session = await approval();
+              topicB = session.topic;
+              resolve();
+            }),
+          ]);
+
+          const expectedRequests = 5;
+          let receivedRequests = 0;
+          await Promise.all([
+            new Promise<void>((resolve) => {
+              clients.B.on("session_request", async (args) => {
+                receivedRequests++;
+                const { id, topic } = args;
+
+                // capture the request on topicB, disconnect and try to approve the request
+                if (topic === topicB) {
+                  await new Promise<void>(async (_resolve) => {
+                    await wallet.disconnect({
+                      topic,
+                      reason: getSdkError("USER_DISCONNECTED"),
+                    });
+                    _resolve();
+                  });
+                }
+                await clients.B.respond({
+                  topic,
+                  response: formatJsonRpcResult(id, "ok"),
+                }).catch((err) => {
+                  // eslint-disable-next-line no-console
+                  console.log("respond error", err);
+                });
+                if (receivedRequests >= expectedRequests) resolve();
+              });
+            }),
+            new Promise<void>((resolve) => {
+              clients.A.request({
+                topic: topicB,
+                ...TEST_REQUEST_PARAMS,
+              });
+              resolve();
+            }),
+            Array.from(Array(expectedRequests).keys()).map(() =>
+              clients.A.request({
+                topic: topicA,
                 ...TEST_REQUEST_PARAMS,
               }),
             ),

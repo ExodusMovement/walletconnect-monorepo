@@ -57,6 +57,7 @@ export declare namespace RelayerTypes {
     sdkVersion: string;
     projectId?: string;
     useOnCloseEvent?: boolean;
+    bundleId?: string;
   }
 }
 

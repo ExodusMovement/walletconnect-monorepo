@@ -1,8 +1,8 @@
 /**
  * Types
  */
-type SdkErrorKey = keyof typeof SDK_ERRORS;
-type InternalErrorKey = keyof typeof INTERNAL_ERRORS;
+export type SdkErrorKey = keyof typeof SDK_ERRORS;
+export type InternalErrorKey = keyof typeof INTERNAL_ERRORS;
 
 /**
  * Constants

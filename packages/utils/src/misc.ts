@@ -8,6 +8,7 @@ import {
 import { getDocument, getLocation, getNavigator } from "@exodus/walletconnect-window-getters";
 import { getWindowMetadata } from "@exodus/walletconnect-window-metadata";
 import { ErrorResponse } from "@exodus/walletconnect-jsonrpc-utils";
+import { IKeyValueStorage } from "@exodus/walletconnect-keyvaluestorage";
 import * as qs from "query-string";
 
 // -- constants -----------------------------------------//
@@ -47,7 +48,7 @@ export function isReactNative(): boolean {
 }
 
 export function isBrowser(): boolean {
-  return !isNode() && !!getNavigator();
+  return !isNode() && !!getNavigator() && !!getDocument();
 }
 
 export function getEnvironment(): string {
@@ -55,6 +56,21 @@ export function getEnvironment(): string {
   if (isNode()) return ENV_MAP.node;
   if (isBrowser()) return ENV_MAP.browser;
   return ENV_MAP.unknown;
+}
+
+export function getBundleId(): string | undefined {
+  try {
+    if (
+      isReactNative() &&
+      typeof global !== "undefined" &&
+      typeof (global as any)?.Application !== "undefined"
+    ) {
+      return (global as any).Application?.applicationId;
+    }
+    return undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 // -- query -----------------------------------------------//
@@ -118,10 +134,17 @@ export function formatRelayRpcUrl({
   auth,
   projectId,
   useOnCloseEvent,
+  bundleId,
 }: RelayerTypes.RpcUrlParams) {
   const splitUrl = relayUrl.split("?");
   const ua = formatUA(protocol, version, sdkVersion);
-  const params = { auth, ua, projectId, useOnCloseEvent: useOnCloseEvent || undefined };
+  const params = {
+    auth,
+    ua,
+    projectId,
+    useOnCloseEvent: useOnCloseEvent || undefined,
+    origin: bundleId || undefined,
+  };
   const queryString = appendToQueryString(splitUrl[1] || "", params);
   return splitUrl[0] + "?" + queryString;
 }
@@ -360,6 +383,20 @@ export async function handleDeeplinkRedirect({
     }
   } catch (err) {
     // Silent error, just log in console
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
+}
+
+export async function getDeepLink(store: IKeyValueStorage, key: string) {
+  try {
+    const deepLink = await store.getItem(key);
+    if (deepLink) return deepLink;
+
+    // check localStorage as fallback
+    if (!isBrowser()) return;
+    return localStorage.getItem(key) as string;
+  } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
   }

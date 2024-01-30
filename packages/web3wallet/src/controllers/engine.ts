@@ -18,11 +18,13 @@ export class Engine extends IWeb3WalletEngine {
     this.signClient = await SignClient.init({
       core: this.client.core,
       metadata: this.client.metadata,
+      logger: this.client.logger,
     });
     this.authClient = await AuthClient.init({
       core: this.client.core,
       projectId: "",
       metadata: this.client.metadata,
+      logger: this.client.logger,
     });
 
     this.initializeEventListeners();
@@ -96,6 +98,11 @@ export class Engine extends IWeb3WalletEngine {
 
   public formatMessage: IWeb3WalletEngine["formatMessage"] = (params, iss) => {
     return this.authClient.formatMessage(params, iss);
+  };
+
+  // Push //
+  public registerDeviceToken: IWeb3WalletEngine["registerDeviceToken"] = (params) => {
+    return this.client.core.echoClient.registerDeviceToken(params);
   };
 
   // ---------- Private ----------------------------------------------- //

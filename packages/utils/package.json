@@ -1,7 +1,7 @@
 {
   "name": "@exodus/walletconnect-utils",
   "description": "Utilities for WalletConnect Protocol",
-  "version": "2.10.4-exodus.0",
+  "version": "2.11.0-exodus.1",
   "author": "WalletConnect, Inc. <walletconnect.com>",
   "homepage": "https://github.com/walletconnect/walletconnect-monorepo/",
   "license": "Apache-2.0",
@@ -33,7 +33,7 @@
     "@exodus/walletconnect-relay-api": "^1.0.9-exodus.0",
     "@exodus/walletconnect-safe-json": "^1.0.2-exodus.0",
     "@exodus/walletconnect-time": "^1.0.2-exodus.0",
-    "@exodus/walletconnect-types": "^2.10.4-exodus.0",
+    "@exodus/walletconnect-types": "^2.11.0-exodus.0",
     "@exodus/walletconnect-window-getters": "^1.0.1-exodus.0",
     "@exodus/walletconnect-window-metadata": "^1.0.1-exodus.0",
     "base64-js": "^1.5.1",

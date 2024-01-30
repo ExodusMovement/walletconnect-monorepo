@@ -10,6 +10,7 @@ import {
 } from "./types";
 import { Metadata, Namespace, UniversalProvider } from "@walletconnect/universal-provider";
 import { SessionTypes, SignClientTypes } from "@exodus/walletconnect-types";
+import { JsonRpcResult } from "@exodus/walletconnect-jsonrpc-types";
 import {
   STORAGE_KEY,
   REQUIRED_METHODS,
@@ -241,7 +242,7 @@ export class EthereumProvider implements IEthereumProvider {
 
   public sendAsync(
     args: RequestArguments,
-    callback: (error: Error | null, response: any) => void,
+    callback: (error: Error | null, response: JsonRpcResult) => void,
   ): void {
     this.signer.sendAsync(args, callback, this.formatChainId(this.chainId));
   }
@@ -518,9 +519,7 @@ export class EthereumProvider implements IEthereumProvider {
       if (WalletConnectModalClass) {
         try {
           this.modal = new WalletConnectModalClass({
-            walletConnectVersion: 2,
             projectId: this.rpc.projectId,
-            standaloneChains: this.rpc.chains,
             ...this.rpc.qrModalOptions,
           });
         } catch (e) {

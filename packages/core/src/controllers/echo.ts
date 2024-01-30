@@ -1,7 +1,8 @@
 import { generateChildLogger, Logger } from "@exodus/walletconnect-logger";
 import { IEchoClient } from "@exodus/walletconnect-types";
 import { ECHO_CONTEXT, ECHO_URL } from "../constants";
-import fetch from "isomorphic-unfetch";
+// @ts-ignore
+import fetch from "@exodus/fetch";
 
 export class EchoClient extends IEchoClient {
   public readonly context = ECHO_CONTEXT;

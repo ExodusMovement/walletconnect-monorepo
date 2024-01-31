@@ -346,6 +346,9 @@ export function mergeArrays<T>(a: T[] = [], b: T[] = []): T[] {
   return [...new Set([...a, ...b])];
 }
 
+const RESTRICTED_PROTOCOLS = /^(?:http|javascript|data):/i;
+const DEEPLINK_BASE = /^[\w-]+:(?:\/\/)??[\w.@-]+$/i;
+
 export async function handleDeeplinkRedirect({
   id,
   topic,
@@ -365,7 +368,13 @@ export async function handleDeeplinkRedirect({
 
     if (deeplink.endsWith("/")) deeplink = deeplink.slice(0, -1);
 
-    const link = `${deeplink}/wc?requestId=${id}&sessionTopic=${topic}`;
+    if (RESTRICTED_PROTOCOLS.test(deeplink)) return;
+    if (!DEEPLINK_BASE.test(deeplink)) return;
+
+    const encodedId = encodeURIComponent(id);
+    const encodedTopic = encodeURIComponent(topic);
+
+    const link = `${deeplink}/wc?requestId=${encodedId}&sessionTopic=${encodedTopic}`;
 
     const env = getEnvironment();
 

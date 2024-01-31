@@ -1,7 +1,7 @@
 {
   "name": "@exodus/walletconnect-sign-client",
   "description": "Sign Client for WalletConnect Protocol",
-  "version": "2.11.0-exodus.0",
+  "version": "2.11.0-exodus.1",
   "author": "WalletConnect, Inc. <walletconnect.com>",
   "homepage": "https://github.com/walletconnect/walletconnect-monorepo/",
   "license": "Apache-2.0",
@@ -36,14 +36,14 @@
     "prettier": "prettier --check '{src,test}/**/*.{js,ts,jsx,tsx}'"
   },
   "dependencies": {
-    "@exodus/walletconnect-core": "^2.11.0-exodus.0",
+    "@exodus/walletconnect-core": "^2.11.0-exodus.3",
     "@exodus/walletconnect-events": "^1.0.1-exodus.0",
     "@exodus/walletconnect-heartbeat": "^1.2.1-exodus.0",
     "@exodus/walletconnect-jsonrpc-utils": "^1.0.8-exodus.0",
     "@exodus/walletconnect-logger": "^2.0.1-exodus.1",
     "@exodus/walletconnect-time": "^1.0.2-exodus.0",
     "@exodus/walletconnect-types": "^2.11.0-exodus.0",
-    "@exodus/walletconnect-utils": "^2.11.0-exodus.0",
+    "@exodus/walletconnect-utils": "^2.11.0-exodus.2",
     "events": "^3.3.0"
   },
   "devDependencies": {

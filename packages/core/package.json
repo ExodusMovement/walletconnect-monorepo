@@ -1,7 +1,7 @@
 {
   "name": "@exodus/walletconnect-core",
   "description": "Core for WalletConnect Protocol",
-  "version": "2.11.0-exodus.2",
+  "version": "2.11.0-exodus.3",
   "author": "WalletConnect, Inc. <walletconnect.com>",
   "homepage": "https://github.com/walletconnect/walletconnect-monorepo/",
   "license": "Apache-2.0",
@@ -42,7 +42,7 @@
     "@exodus/walletconnect-safe-json": "^1.0.2-exodus.0",
     "@exodus/walletconnect-time": "^1.0.2-exodus.0",
     "@exodus/walletconnect-types": "^2.11.0-exodus.0",
-    "@exodus/walletconnect-utils": "^2.11.0-exodus.1",
+    "@exodus/walletconnect-utils": "^2.11.0-exodus.2",
     "events": "^3.3.0",
     "lodash.isequal": "4.5.0"
   },

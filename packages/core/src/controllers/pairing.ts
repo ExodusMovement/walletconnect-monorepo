@@ -154,7 +154,7 @@ export class Pairing implements IPairing {
     await this.isValidPing(params);
     const { topic } = params;
     if (this.pairings.keys.includes(topic)) {
-      const id = await this.sendRequest(topic, "wc_pairingPing", {});
+      const id = await this.sendRequest(topic, "wc_pairingPing", Object.create(null));
       const { done, resolve, reject } = createDelayedPromise<void>();
       this.events.once(engineEvent("pairing_ping", id), ({ error }) => {
         if (error) reject(error);
@@ -320,7 +320,7 @@ export class Pairing implements IPairing {
     // where pairing_ping listener is not yet initialized
     setTimeout(() => {
       if (isJsonRpcResult(payload)) {
-        this.events.emit(engineEvent("pairing_ping", id), {});
+        this.events.emit(engineEvent("pairing_ping", id), Object.create(null));
       } else if (isJsonRpcError(payload)) {
         this.events.emit(engineEvent("pairing_ping", id), { error: payload.error });
       }

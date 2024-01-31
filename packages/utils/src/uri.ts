@@ -45,7 +45,7 @@ export function parseTopic(topic: string): string {
 
 export function formatRelayParams(relay: RelayerTypes.ProtocolOptions, delimiter = "-") {
   const prefix = "relay";
-  const params: any = {};
+  const params: any = Object.create(null);
   Object.keys(relay).forEach((key) => {
     const k = prefix + delimiter + key;
     if (relay[key]) {

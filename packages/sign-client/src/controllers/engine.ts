@@ -133,8 +133,8 @@ export class Engine extends IEngine {
 
     const connectParams = {
       ...params,
-      requiredNamespaces: params.requiredNamespaces || {},
-      optionalNamespaces: params.optionalNamespaces || {},
+      requiredNamespaces: params.requiredNamespaces || Object.create(null),
+      optionalNamespaces: params.optionalNamespaces || Object.create(null),
     };
     await this.isValidConnect(connectParams);
     const { pairingTopic, requiredNamespaces, optionalNamespaces, sessionProperties, relays } =
@@ -328,7 +328,11 @@ export class Engine extends IEngine {
     await this.isInitialized();
     await this.isValidExtend(params);
     const { topic } = params;
-    const id = await this.sendRequest({ topic, method: "wc_sessionExtend", params: {} });
+    const id = await this.sendRequest({
+      topic,
+      method: "wc_sessionExtend",
+      params: Object.create(null),
+    });
     const { done: acknowledged, resolve, reject } = createDelayedPromise<void>();
     this.events.once(engineEvent("session_extend", id), ({ error }) => {
       if (error) reject(error);
@@ -395,7 +399,11 @@ export class Engine extends IEngine {
     await this.isValidPing(params);
     const { topic } = params;
     if (this.client.session.keys.includes(topic)) {
-      const id = await this.sendRequest({ topic, method: "wc_sessionPing", params: {} });
+      const id = await this.sendRequest({
+        topic,
+        method: "wc_sessionPing",
+        params: Object.create(null),
+      });
       const { done, resolve, reject } = createDelayedPromise<void>();
       this.events.once(engineEvent("session_ping", id), ({ error }) => {
         if (error) reject(error);
@@ -856,7 +864,7 @@ export class Engine extends IEngine {
     const { id } = payload;
     if (isJsonRpcResult(payload)) {
       await this.client.session.update(topic, { acknowledged: true });
-      this.events.emit(engineEvent("session_approve", id), {});
+      this.events.emit(engineEvent("session_approve", id), Object.create(null));
     } else if (isJsonRpcError(payload)) {
       await this.client.session.delete(topic, getSdkError("USER_DISCONNECTED"));
       this.events.emit(engineEvent("session_approve", id), { error: payload.error });
@@ -898,7 +906,7 @@ export class Engine extends IEngine {
   private onSessionUpdateResponse: EnginePrivate["onSessionUpdateResponse"] = (_topic, payload) => {
     const { id } = payload;
     if (isJsonRpcResult(payload)) {
-      this.events.emit(engineEvent("session_update", id), {});
+      this.events.emit(engineEvent("session_update", id), Object.create(null));
     } else if (isJsonRpcError(payload)) {
       this.events.emit(engineEvent("session_update", id), { error: payload.error });
     }
@@ -923,7 +931,7 @@ export class Engine extends IEngine {
   private onSessionExtendResponse: EnginePrivate["onSessionExtendResponse"] = (_topic, payload) => {
     const { id } = payload;
     if (isJsonRpcResult(payload)) {
-      this.events.emit(engineEvent("session_extend", id), {});
+      this.events.emit(engineEvent("session_extend", id), Object.create(null));
     } else if (isJsonRpcError(payload)) {
       this.events.emit(engineEvent("session_extend", id), { error: payload.error });
     }
@@ -947,7 +955,7 @@ export class Engine extends IEngine {
     // where session_ping listener is not yet initialized
     setTimeout(() => {
       if (isJsonRpcResult(payload)) {
-        this.events.emit(engineEvent("session_ping", id), {});
+        this.events.emit(engineEvent("session_ping", id), Object.create(null));
       } else if (isJsonRpcError(payload)) {
         this.events.emit(engineEvent("session_ping", id), { error: payload.error });
       }

@@ -10,8 +10,8 @@ export class Engine extends IWeb3WalletEngine {
   constructor(client: IWeb3WalletEngine["client"]) {
     super(client);
     // initialized in init()
-    this.signClient = {} as any;
-    this.authClient = {} as any;
+    this.signClient = Object.create(null) as any;
+    this.authClient = Object.create(null) as any;
   }
 
   public init = async () => {

@@ -54,7 +54,7 @@ export function getRequiredNamespacesFromNamespaces(
   const validNamespacesError = isValidNamespaces(namespaces, caller);
   if (validNamespacesError) throw new Error(validNamespacesError.message);
 
-  const required = {};
+  const required = Object.create(null);
   for (const [namespace, values] of Object.entries(namespaces)) {
     required[namespace] = {
       methods: values.methods,
@@ -84,14 +84,14 @@ export function buildApprovedNamespaces(
   params: BuildApprovedNamespacesParams,
 ): SessionTypes.Namespaces {
   const {
-    proposal: { requiredNamespaces, optionalNamespaces = {} },
+    proposal: { requiredNamespaces, optionalNamespaces = Object.create(null) },
     supportedNamespaces,
   } = params;
   const normalizedRequired = normalizeNamespaces(requiredNamespaces);
   const normalizedOptional = normalizeNamespaces(optionalNamespaces);
 
   // build approved namespaces
-  const namespaces = {};
+  const namespaces = Object.create(null);
   Object.keys(supportedNamespaces).forEach((namespace) => {
     const supportedChains = supportedNamespaces[namespace].chains;
     const supportedMethods = supportedNamespaces[namespace].methods;
@@ -116,7 +116,7 @@ export function buildApprovedNamespaces(
   const err = isConformingNamespaces(requiredNamespaces, namespaces, "approve()");
   if (err) throw new Error(err.message);
 
-  const approvedNamespaces = {};
+  const approvedNamespaces = Object.create(null);
 
   // if both required & optional namespaces are empty, return all supported namespaces by the wallet
   if (!Object.keys(requiredNamespaces).length && !Object.keys(optionalNamespaces).length)
@@ -212,7 +212,7 @@ export function parseNamespaceKey(namespace: string) {
 export function normalizeNamespaces(
   namespaces: ProposalTypes.RequiredNamespaces,
 ): ProposalTypes.RequiredNamespaces {
-  const normalizedNamespaces = {} as ProposalTypes.RequiredNamespaces;
+  const normalizedNamespaces = Object.create(null) as ProposalTypes.RequiredNamespaces;
   if (!isValidObject(namespaces)) return normalizedNamespaces;
   for (const [key, values] of Object.entries(namespaces)) {
     const chains = isCaipNamespace(key) ? [key] : values.chains;

@@ -1,6 +1,6 @@
 import { generateChildLogger, Logger } from "@exodus/walletconnect-logger";
 import { IEchoClient } from "@exodus/walletconnect-types";
-import { ECHO_CONTEXT, ECHO_URL } from "../constants";
+import { ECHO_CONTEXT } from "../constants";
 
 // @ts-ignore
 // import { fetch } from "@exodus/fetch";
@@ -14,7 +14,7 @@ export class EchoClient extends IEchoClient {
     this.logger = generateChildLogger(logger, this.context);
   }
 
-  public registerDeviceToken: IEchoClient["registerDeviceToken"] = async (params) => {
+  public registerDeviceToken: IEchoClient["registerDeviceToken"] = async () => {
     // const { clientId, token, notificationType, enableEncrypted = false } = params;
 
     // const echoUrl = url`${ECHO_URL}/${this.projectId}/clients`;

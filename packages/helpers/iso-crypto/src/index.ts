@@ -7,10 +7,14 @@ import {
   IEncryptionPayload,
 } from "@exodus/walletconnect-types";
 import { convertArrayBufferToBuffer, convertBufferToArrayBuffer } from "@exodus/walletconnect-utils-v1";
+import { randomBytes } from '@exodus/crypto/randomBytes'
+import { hmac } from '@exodus/crypto/hmac'
+
+
 
 export async function generateKey(length?: number): Promise<ArrayBuffer> {
   const _length = (length || 256) / 8;
-  const bytes = crypto.randomBytes(_length);
+  const bytes = randomBytes(_length);
   const result = convertBufferToArrayBuffer(encoding.arrayToBuffer(bytes));
 
   return result;
@@ -22,7 +26,7 @@ export async function verifyHmac(payload: IEncryptionPayload, key: Uint8Array): 
   const hmac = encoding.hexToArray(payload.hmac);
   const hmacHex: string = encoding.arrayToHex(hmac, false);
   const unsigned = encoding.concatArrays(cipherText, iv);
-  const chmac = await crypto.hmacSha256Sign(key, unsigned);
+  const chmac = await hmac('sha256', key, unsigned)
   const chmacHex: string = encoding.arrayToHex(chmac, false);
 
   if (encoding.removeHexPrefix(hmacHex) === encoding.removeHexPrefix(chmacHex)) {
@@ -50,8 +54,8 @@ export async function encrypt(
   const cipherTextHex: string = encoding.arrayToHex(cipherText, false);
 
   const unsigned = encoding.concatArrays(cipherText, iv);
-  const hmac = await crypto.hmacSha256Sign(_key, unsigned);
-  const hmacHex: string = encoding.arrayToHex(hmac, false);
+  const hmacBuf = await hmac('sha256', _key, unsigned);
+  const hmacHex: string = encoding.arrayToHex(hmacBuf, false);
 
   return {
     data: cipherTextHex,

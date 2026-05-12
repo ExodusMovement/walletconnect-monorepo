@@ -20,8 +20,7 @@ export const buildVerifyContext = async (
     try {
       const attestation = await resolve({ attestationId });
       if (attestation) {
-        const origin =
-          typeof attestation === "string" ? attestation : (attestation as any).origin;
+        const origin = typeof attestation === "string" ? attestation : (attestation as any).origin;
         if (origin && typeof origin === "string") {
           // Registered dApps always declare metadata.url; receiving an attested
           // origin while the dApp claims nothing is mismatch by definition.

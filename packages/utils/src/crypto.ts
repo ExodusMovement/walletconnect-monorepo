@@ -35,13 +35,13 @@ function _hkdf32(key: Uint8Array) {
     throw new Error("key must be of length 32");
   }
   const zeroes = new Uint8Array(32);
-  const prk = hmacSync('sha256', zeroes, key, 'uint8');
+  const prk = hmacSync("sha256", zeroes, key, "uint8");
 
   // Since the derived key will be of length 32, we only need to do one HMAC.
   // There's no need for writing a loop that repeadly calls HMAC.
   const one = new Uint8Array([1]);
 
-  return hmacSync('sha256', prk, one, 'uint8');
+  return hmacSync("sha256", prk, one, "uint8");
 }
 
 export function uint8array2hex(arr: Uint8Array): string {
@@ -74,7 +74,7 @@ export function deriveSymKey(privateKeyA: string, publicKeyB: string): string {
 }
 
 export function hashKey(key: string): string {
-  return hashSync('sha256', hex2uint8array(key), 'hex');
+  return hashSync("sha256", hex2uint8array(key), "hex");
 }
 
 function utf8string2uint8array(str: string): Uint8Array {
@@ -82,7 +82,7 @@ function utf8string2uint8array(str: string): Uint8Array {
 }
 
 export function hashMessage(message: string): string {
-  return hashSync('sha256', message, 'hex');
+  return hashSync("sha256", message, "hex");
 }
 
 export function encodeTypeByte(type: number): Uint8Array {
@@ -114,7 +114,7 @@ export async function encrypt(params: CryptoTypes.EncryptParams): Promise<string
     data: utf8string2uint8array(params.message),
     key: hex2uint8array(params.symKey),
     nonce: iv,
-  })
+  });
   return serialize({ type, sealed, iv, senderPublicKey });
 }
 
@@ -124,7 +124,7 @@ export async function decrypt(params: CryptoTypes.DecryptParams): Promise<string
     data: sealed,
     key: hex2uint8array(params.symKey),
     nonce: iv,
-  })
+  });
   if (message === null) throw new Error("Failed to decrypt");
   return Buffer.from(message).toString("utf8");
 }

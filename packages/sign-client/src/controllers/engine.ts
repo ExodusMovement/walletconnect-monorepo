@@ -26,7 +26,6 @@ import {
   IEngineEvents,
   JsonRpcTypes,
   PendingRequestTypes,
-  Verify,
   CoreTypes,
   ProposalTypes,
   RelayerTypes,
@@ -69,6 +68,7 @@ import {
   getDeepLink,
 } from "@exodus/walletconnect-utils";
 import EventEmmiter from "events";
+import { buildVerifyContext } from "../utils/verifyContext";
 import {
   ENGINE_CONTEXT,
   ENGINE_RPC_OPTS,
@@ -1457,17 +1457,15 @@ export class Engine extends IEngine {
     await this.isValidSessionOrPairingTopic(topic);
   };
 
-  private getVerifyContext = async (_hash: string, metadata: CoreTypes.Metadata) => {
-    const context: Verify.Context = {
-      verified: {
-        verifyUrl: metadata.verifyUrl || "",
-        validation: "UNKNOWN",
-        origin: metadata.url || "",
+  private getVerifyContext = (hash: string, metadata: CoreTypes.Metadata) =>
+    buildVerifyContext(
+      {
+        resolve: (args) => this.client.core.verify.resolve(args),
+        logError: (e) => this.client.logger.error(e),
       },
-    };
-
-    return context;
-  };
+      hash,
+      metadata,
+    );
 
   private validateSessionProps = (properties: ProposalTypes.SessionProperties, type: string) => {
     Object.values(properties).forEach((property) => {
